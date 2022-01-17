@@ -1,6 +1,11 @@
+//  This defines the app's logic.
+
 import logo from './logo.svg';
 import './App.css';
 
+//  Returns the page html to be displayed
+//  (The css corresponding to this html is in
+//  App.css)
 function App() {
   return (
     <div className="App">
@@ -22,4 +27,5 @@ function App() {
   );
 }
 
+//  Eport the function to be called elsewhere
 export default App;

@@ -28,3 +28,5 @@ Options for running/debugging:
 
 - [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
 - [React documentation](https://reactjs.org/)
+- [Test-Library documentation](https://testing-library.com/docs/)
+- [Jest documentation](https://jestjs.io/docs/)
