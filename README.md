@@ -1,3 +1,5 @@
+[![Build and deploy Node.js app to Azure Web App - Liquorish](https://github.com/anthonymesa/liquorish/actions/workflows/main_liquorish.yml/badge.svg?branch=main)](https://github.com/anthonymesa/liquorish/actions/workflows/main_liquorish.yml)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
