@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+//  This renders the code generated in the React.StrictMode 
+//  section to the 'root' element of index.html listed in
+//  the public directory, before it is built to the final
+//  file in the build directory.
 ReactDOM.render(
   <React.StrictMode>
     <App />
