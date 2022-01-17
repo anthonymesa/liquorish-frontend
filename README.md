@@ -7,6 +7,8 @@
 
 Liquorish is a React/NodeJs powered web-app that allows bar patrons to order custom mixed-liquor drinks wirelessly on-location.
 
+The live site can be visited [HERE!](https://liquorish.azurewebsites.net/)
+
 ## Development
 
 ### Prerequisites
