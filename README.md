@@ -1,5 +1,9 @@
 # Liquorish
-[![Build and deploy Node.js app to Azure Web App - Liquorish](https://github.com/anthonymesa/liquorish/actions/workflows/main_liquorish.yml/badge.svg?branch=main)](https://github.com/anthonymesa/liquorish/actions/workflows/main_liquorish.yml)
+[![Build and Deploy](https://github.com/anthonymesa/liquorish/actions/workflows/main_liquorish.yml/badge.svg?branch=main)](https://github.com/anthonymesa/liquorish/actions/workflows/main_liquorish.yml)
+![Node](https://badges.aleen42.com/src/node.svg)
+![React](https://badges.aleen42.com/src/react.svg)
+![npm](https://badges.aleen42.com/src/npm.svg)
+
 
 Liquorish is a React/NodeJs powered web-app that allows bar patrons to order custom mixed-liquor drinks wirelessly on-location.
 
