@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'Liquorish'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EEFD742B208E44CBAAF91C9157D1919C }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8A1DF9BD24204406A5969A5885064D89 }}
           package: .
