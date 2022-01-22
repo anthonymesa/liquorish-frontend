@@ -3,6 +3,11 @@
 import logo from './logo.svg';
 import './App.css';
 
+function get_a_number()
+{
+  return 10;
+}
+
 //  Returns the page html to be displayed
 //  (The css corresponding to this html is in
 //  App.css)
@@ -20,7 +25,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+        { get_a_number() }
         </a>
       </header>
     </div>
