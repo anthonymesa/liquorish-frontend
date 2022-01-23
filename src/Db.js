@@ -27,3 +27,5 @@ class Db_test_connection extends React.Component {
         )
     }
 }
+
+export default Db_test_connection;
