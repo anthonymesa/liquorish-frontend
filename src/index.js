@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Db_test_connection from './Db.js';
+import DbTestConnection from './Db.js';
 import reportWebVitals from './reportWebVitals';
 
 //  This renders the code generated in the React.StrictMode 
@@ -12,7 +12,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <Db_test_connection />
+    <DbTestConnection />
   </React.StrictMode>,
   document.getElementById('root')
 );

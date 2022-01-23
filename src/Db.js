@@ -2,7 +2,7 @@
 import React from 'react';
 import './Db.css';
 
-class Db_test_connection extends React.Component {
+class DbTestConnection extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -28,4 +28,4 @@ class Db_test_connection extends React.Component {
     }
 }
 
-export default Db_test_connection;
+export default DbTestConnection;
