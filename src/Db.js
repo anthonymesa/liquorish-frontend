@@ -10,7 +10,7 @@ class DbTestConnection extends React.Component {
         }
     }
 
-    componendDidMount() {
+    componentDidMount() {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", 'http://liquorish-server.azurewebsites.net/test', false ); // false for synchronous request
         xmlHttp.send( null );
