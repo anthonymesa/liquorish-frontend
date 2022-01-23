@@ -25,7 +25,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-        { get_a_number() }
+          { get_a_number() } learn react
         </a>
       </header>
     </div>
