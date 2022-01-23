@@ -36,7 +36,7 @@ function App() {
           rel="noopener noreferrer"
         >
           {
-            httpGet('http://liquorish-server.azurewebsites.net/test.js')
+            httpGet('http://liquorish-server.azurewebsites.net/test')
           } 
           learn react
         </a>
