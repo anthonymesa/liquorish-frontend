@@ -11,7 +11,9 @@ function httpGet(theUrl)
     return xmlHttp.responseText;
 }
 
-//  Returns the page html to be displayed
+//  https://www.w3schools.com/react/react_components.asp
+//
+//  Function Component that Returns the page html to be displayed
 //  (The css corresponding to this html is in
 //  App.css)
 function App() {
@@ -34,7 +36,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          { httpGet('http://liquorish-server.azurewebsites.net/test') } learn react
+         learn react
         </a>
       </header>
     </div>
