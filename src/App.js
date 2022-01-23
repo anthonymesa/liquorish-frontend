@@ -1,7 +1,10 @@
 //  This defines the app's logic.
 
-import logo from './logo.svg';
+//  Link Css for component
 import './App.css';
+
+import logo from './logo.svg';
+import DbTestConnection from './Db';
 
 //  https://www.w3schools.com/react/react_components.asp
 //
