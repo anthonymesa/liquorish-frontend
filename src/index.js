@@ -12,7 +12,6 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <DbTestConnection />
   </React.StrictMode>,
   document.getElementById('root')
 );

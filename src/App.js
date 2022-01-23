@@ -3,14 +3,6 @@
 import logo from './logo.svg';
 import './App.css';
 
-function httpGet(theUrl)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
-}
-
 //  https://www.w3schools.com/react/react_components.asp
 //
 //  Function Component that Returns the page html to be displayed
@@ -36,8 +28,9 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-         learn react
+        learn react
         </a>
+        <DbTestConnection />
       </header>
     </div>
   );
