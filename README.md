@@ -24,6 +24,10 @@ Options for running/debugging:
 - ```npm test``` to launch the test runner in the interactive watch mode.
 - ```npm run build``` to build the app for production to the 'build' folder for deployment.
 
+### Troubleshooting
+
+When running for the first time, you may get an error that modules cannot be found in node_modules. In this case run ```npm install``` to install the modules.
+
 ### Resources
 
 - [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
