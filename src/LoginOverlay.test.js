@@ -6,7 +6,7 @@
 //  https://testing-library.com/docs/queries/about/
 
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import LoginOverlay from './LoginOverlay';
 
 //  This test renders the html from the App()
 //  function in App.js and then tests if the
