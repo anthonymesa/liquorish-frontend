@@ -15,7 +15,6 @@ class LoginOverlay extends React.Component {
       Again, binding these two functions so that we can reference
       'this' within them.
     */
-    this.updateUsername = this.updateUsername.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     
     /*
