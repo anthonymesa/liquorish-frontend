@@ -13,7 +13,7 @@ class Home extends React.Component {
     return (
         <div>
             <p>
-                Hey { this.props.username } !
+                Hey { this.props.applicationState.get.client_id } !
             </p>
         </div>
     );

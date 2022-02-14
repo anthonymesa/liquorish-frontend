@@ -17,7 +17,7 @@ class LoginFormBar extends React.Component {
 
     handleSignIn() {
         let value = this.bar_username_input.current.value;
-        this.props.onLoginUsernameUpdated(value);
+        this.props.applicationState.set.client_id(value);
     }
 
     createUserAlert() {
@@ -25,7 +25,7 @@ class LoginFormBar extends React.Component {
     }
 
     updateLoginFormTypeHandler() {
-        this.props.updateLoginFormType("user");
+        this.props.applicationState.set.client_type("user");
     }
 
     render() {
