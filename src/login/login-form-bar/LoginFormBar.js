@@ -9,7 +9,7 @@ class LoginFormBar extends React.Component {
         super(props);
 
         this.handleSignIn = this.handleSignIn.bind(this);
-        this.updateLoginFormTypeHandler = this.updateLoginFormTypeHandler(this);
+        this.updateLoginFormTypeHandler = this.updateLoginFormTypeHandler.bind(this);
 
         this.bar_username_input = React.createRef();
         this.bar_password_input = React.createRef();
@@ -32,12 +32,12 @@ class LoginFormBar extends React.Component {
         return (
             <div id="login_form_user">
                 <div class="row desc">
-                    <p>Sign in to user</p>
+                    <p>Sign in to bar</p>
                 </div>
                 <div class="bodyContent">
                     <div class="row">
                         <form>
-                            <input id="user_username" type="text" placeholder="Username" ref={this.bar_username_input} />
+                            <input id="user_username" type="text" placeholder="Bar Username" ref={this.bar_username_input} />
                         </form>
                     </div>
                     <div class="row">
@@ -50,7 +50,7 @@ class LoginFormBar extends React.Component {
                     </Link>
                 </div>
                 <div class="row">
-                    <button class="btnSecondary" onClick={ this.createUserAlert }>Sign Up</button>
+                    <button class="btnSecondary" onClick={ this.createUserAlert }>Create Merchant Account</button>
                 </div>
                 <div class="row footer">
                     <Link to="/">

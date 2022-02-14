@@ -9,7 +9,7 @@ class LoginFormUser extends React.Component {
         super(props);
 
         this.handleSignIn = this.handleSignIn.bind(this);
-        this.updateLoginFormTypeHandler = this.updateLoginFormTypeHandler(this);
+        this.updateLoginFormTypeHandler = this.updateLoginFormTypeHandler.bind(this);
 
         this.user_username_input = React.createRef();
         this.user_password_input = React.createRef();
