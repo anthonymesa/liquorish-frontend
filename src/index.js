@@ -30,7 +30,7 @@ class App extends React.Component {
     this.state = {
         logged_in: false,
         clent_id: "",
-        client_type: "user",
+        client_type: "default",
     }
   }
 
@@ -83,7 +83,7 @@ class App extends React.Component {
             Here a route is created to the /home page, and we are passing the username stored in the App's state
             so that the home will display the username of the user logged in.
           */}
-          <Route path="home" element={<Home applicationState={ application_state }/>} />
+          <Route path="home/user" element={<Home applicationState={ application_state }/>} />
         </Routes>
       </BrowserRouter>
     );
