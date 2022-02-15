@@ -18,7 +18,9 @@ class App extends React.Component {
       so that we can use this.setState inside of it (binding makes sure that
       'this' references this class object)
     */
-    this.handleUsernameUpdate = this.handleUsernameUpdate.bind(this);
+    this.setLoggedIn = this.setLoggedIn.bind(this);
+    this.setClientId = this.setClientId.bind(this);
+    this.setClientType = this.setClientType.bind(this);
 
     /*
       Here we are keeping track of the username at the app level. we can
@@ -26,7 +28,9 @@ class App extends React.Component {
       it as a prop to the module.
     */
     this.state = {
-        username: "",
+        logged_in: false,
+        clent_id: "",
+        client_type: "default",
     }
   }
 
@@ -37,11 +41,33 @@ class App extends React.Component {
     app module's username variable. since a change in state causes the module to re-render,
     it should update in all modules that use the username value as well.
   */
-  handleUsernameUpdate(temp_user){
-    this.setState({username: temp_user});
+  setLoggedIn(value){
+    this.setState({logged_in: value});
+  }
+
+  setClientId(value){
+    this.setState({client_id: value});
+  }
+
+  setClientType(value){
+    this.setState({client_type: value});
   }
 
   render() {
+
+    let application_state = {
+      get: {
+        logged_in: this.state.logged_in,
+        client_id: this.state.client_id,
+        client_type: this.state.client_type
+      },
+      set: {
+        logged_in: this.setLoggedIn,
+        client_id: this.setClientId,
+        client_type: this.setClientType
+      }
+    }
+
     return (
       <BrowserRouter>
         <Routes>
@@ -51,13 +77,13 @@ class App extends React.Component {
             as a callback inside the property named onLoginUsernameUpdated. in LoginOverlay, the onLoginUsernameUpdated
             property which contains the callback will be called to update the App module's state variable 'username'.
           */}
-          <Route path="/" element={<Login onLoginUsernameUpdated={ this.handleUsernameUpdate } />} /> 
+          <Route path="/" element={<Login applicationState={ application_state } />} /> 
 
           {/*
             Here a route is created to the /home page, and we are passing the username stored in the App's state
             so that the home will display the username of the user logged in.
           */}
-          <Route path="home" element={<Home username={ this.state.username }/>} />
+          <Route path="home/user" element={<Home applicationState={ application_state }/>} />
         </Routes>
       </BrowserRouter>
     );
