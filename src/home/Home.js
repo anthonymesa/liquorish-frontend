@@ -2,13 +2,30 @@ import './Home.css';
 
 import React from 'react';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 import { FiMenu } from 'react-icons/fi'
 
 const Header = () => {
+  let location = useLocation();
+  let username = "unknown";
+
+  if( location.state.author_name != null)
+  {
+    username = location.state.author_name;
+  }
+
+  let dummy_data;
+  try{
+    dummy_data=localStorage.getItem('test');
+  } catch (e) {
+    console.error(e.message);
+  }
+
   return (
     <div>
-      <div>hi (Username!)</div>
+      <div>hi { username }</div>
+      <div>{ dummy_data }</div>
       <button>
         <div><FiMenu /></div>
       </button>

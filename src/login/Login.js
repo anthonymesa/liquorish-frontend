@@ -41,17 +41,22 @@ const getHash = async (username, password) => {
     return hashHex;
 }
 
-const validateLogin = async (username, password) => {
+const validateLogin = async (username, password, cb) => {
   let hashValue = await getHash(username, password);
 
-  let url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + hashValue.toUpperCase();
-  console.log(url);
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", url, false); // false for synchronous request
-  xmlHttp.send(null);
-  
-  return xmlHttp.responseText;
-}
+  const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + hashValue.toUpperCase();
+
+  fetch(url)
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      }
+    })
+    .then(data => {
+      console.log(data);
+      cb(data);
+    })
+  }
 
 const LoginFormUser = (props) => {
   let navigate = useNavigate();
@@ -70,14 +75,31 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
+  const addDataIntoCache = (cacheName, url, response) => {
+    // Converting our response into Actual Response form
+    const data = new Response(JSON.stringify(response));
+  
+    console.log(data);
+
+    if ('caches' in window) {
+      // Opening given cache and putting our data into it
+      caches.open(cacheName).then((cache) => {
+        cache.put(url, data);
+      });
+    }
+  };
+
   const completeLogin = async () => {
     // need to get client ID and pass it up to index
-    navigate("home/user", { replace: true });
+    addDataIntoCache('Liquorish', 'http://localhost:3000', 'some_value');
+    localStorage.setItem('test', JSON.stringify("a pimp named slickback"));
+    navigate("home/user", { replace: true, state: { author_name: "john_doe"} });
   }
 
   const handleSignIn = async () => {
-    const response = await validateLogin(username, password);
-    response === "true" ? completeLogin() : invalidLoginAlert();
+    await validateLogin(username, password, (response) => {
+      response === true ? completeLogin() : invalidLoginAlert();
+    });
   }
 
   return (
