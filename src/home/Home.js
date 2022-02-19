@@ -10,14 +10,9 @@ const Header = () => {
   let location = useLocation();
   let username = "unknown";
 
-  if( location.state.author_name != null)
-  {
-    username = location.state.author_name;
-  }
-
   let dummy_data;
   try{
-    dummy_data=localStorage.getItem('test');
+    dummy_data=JSON.parse(localStorage.getItem('blob')).value1;
   } catch (e) {
     console.error(e.message);
   }

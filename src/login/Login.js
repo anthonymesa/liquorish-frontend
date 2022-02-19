@@ -31,32 +31,19 @@ const invalidLoginAlert = () => {
   alert("Username or password is incorrect.");
 }
 
-const getHash = async (username, password) => {
-    const utf8 = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-    return hashHex;
-}
-
 const validateLogin = async (username, password, cb) => {
-  let hashValue = await getHash(username, password);
 
-  const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + hashValue.toUpperCase();
+  const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
 
-  fetch(url)
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-    })
-    .then(data => {
-      console.log(data);
-      cb(data);
-    })
-  }
+  fetch(url).then(response => {
+    if(response.ok) {
+      return response.json();
+    }
+  }).then(data => {
+    console.log(data);
+    cb(data);
+  });
+}
 
 const LoginFormUser = (props) => {
   let navigate = useNavigate();
@@ -75,25 +62,12 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
-  const addDataIntoCache = (cacheName, url, response) => {
-    // Converting our response into Actual Response form
-    const data = new Response(JSON.stringify(response));
-  
-    console.log(data);
-
-    if ('caches' in window) {
-      // Opening given cache and putting our data into it
-      caches.open(cacheName).then((cache) => {
-        cache.put(url, data);
-      });
-    }
-  };
-
   const completeLogin = async () => {
-    // need to get client ID and pass it up to index
-    addDataIntoCache('Liquorish', 'http://localhost:3000', 'some_value');
-    localStorage.setItem('test', JSON.stringify("a pimp named slickback"));
-    navigate("home/user", { replace: true, state: { author_name: "john_doe"} });
+    localStorage.setItem('blob', JSON.stringify({
+      value1: "something",
+      value2: "something else"
+    }));
+    navigate("home/user");
   }
 
   const handleSignIn = async () => {
