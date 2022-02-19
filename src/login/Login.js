@@ -31,26 +31,18 @@ const invalidLoginAlert = () => {
   alert("Username or password is incorrect.");
 }
 
-const getHash = async (username, password) => {
-    const utf8 = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-    return hashHex;
-}
+const validateLogin = async (username, password, cb) => {
 
-const validateLogin = async (username, password) => {
-  let hashValue = await getHash(username, password);
+  const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
 
-  let url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + hashValue.toUpperCase();
-  console.log(url);
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", url, false); // false for synchronous request
-  xmlHttp.send(null);
-  
-  return xmlHttp.responseText;
+  fetch(url).then(response => {
+    if(response.ok) {
+      return response.json();
+    }
+  }).then(data => {
+    console.log(data);
+    cb(data);
+  });
 }
 
 const LoginFormUser = (props) => {
@@ -71,13 +63,17 @@ const LoginFormUser = (props) => {
   }
 
   const completeLogin = async () => {
-    // need to get client ID and pass it up to index
-    navigate("home/user", { replace: true });
+    localStorage.setItem('blob', JSON.stringify({
+      value1: "something",
+      value2: "something else"
+    }));
+    navigate("home/user");
   }
 
   const handleSignIn = async () => {
-    const response = await validateLogin(username, password);
-    response === "true" ? completeLogin() : invalidLoginAlert();
+    await validateLogin(username, password, (response) => {
+      response === true ? completeLogin() : invalidLoginAlert();
+    });
   }
 
   return (

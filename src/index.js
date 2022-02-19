@@ -8,6 +8,7 @@ import './index.css';
 // Import our main page modules.
 import Login from './login/Login';
 import Home from './home/Home';
+import Dashboard from './dashboard/Dashboard'
 
 class App extends React.Component {
   constructor(props) {
@@ -84,6 +85,8 @@ class App extends React.Component {
             so that the home will display the username of the user logged in.
           */}
           <Route path="home/user" element={<Home applicationState={ application_state }/>} />
+
+          <Route path="dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     );

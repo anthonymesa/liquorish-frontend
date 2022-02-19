@@ -2,12 +2,28 @@ import './Home.css';
 
 import React from 'react';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+
+import { FiMenu } from 'react-icons/fi'
 
 const Header = () => {
+  let location = useLocation();
+  let username = "unknown";
+
+  let dummy_data;
+  try{
+    dummy_data=JSON.parse(localStorage.getItem('blob')).value1;
+  } catch (e) {
+    console.error(e.message);
+  }
+
   return (
     <div>
-      <div>hi (Username!)</div>
-      <div>settings</div>
+      <div>hi { username }</div>
+      <div>{ dummy_data }</div>
+      <button>
+        <div><FiMenu /></div>
+      </button>
     </div>
   )
 }
@@ -36,7 +52,7 @@ const Home = (props) => {
 
   const handleClickBar = (bar_name) => {
     console.log(bar_name);
-    navigate("dashboard", { replace: true });
+    navigate("../dashboard", { replace: true });
   }
 
   const barListItems = bars_near_me.map((data) =>
