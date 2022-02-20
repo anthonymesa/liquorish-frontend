@@ -42,8 +42,7 @@ const validateLogin = async (username, password, cb) => {
       return response.json();
     }
   }).then(data => {
-    console.log(data);
-    cb(data);
+    cb(data.status); //!! EXPECTING { 'status': 0 } or similar
   });
 }
 
@@ -66,7 +65,10 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
-  const completeLogin = async () => {
+  const completeLogin = async (client_id) => {
+
+    sessionStorage.setItem('client_id', JSON.stringify(client_id));
+
     setAuth(true, () => {
       navigate("home/user");
     });
@@ -74,7 +76,7 @@ const LoginFormUser = (props) => {
 
   const handleSignIn = async () => {
     await validateLogin(username, password, (response) => {
-      response === true ? completeLogin() : invalidLoginAlert();
+      response > -1 ? completeLogin(response) : invalidLoginAlert();
     });
   }
 
