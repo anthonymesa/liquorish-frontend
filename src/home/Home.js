@@ -2,28 +2,20 @@ import './Home.css';
 
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
 
 import { FiMenu } from 'react-icons/fi'
 
 const Header = () => {
-  let location = useLocation();
   let username = "unknown";
-
-  let dummy_data;
-  try{
-    dummy_data=JSON.parse(localStorage.getItem('blob')).value1;
-  } catch (e) {
-    console.error(e.message);
-  }
-
+  
   return (
-    <div>
-      <div>hi { username }</div>
-      <div>{ dummy_data }</div>
-      <button>
-        <div><FiMenu /></div>
-      </button>
+    <div className="header">
+      <div id="greeting">
+        <p>Welcome { username }</p>
+      </div>
+      <div id="settings_button">
+        <div><FiMenu size="2em" onClick={ () => { console.log("go to settings...")} }/></div>
+      </div>
     </div>
   )
 }
@@ -56,8 +48,8 @@ const Home = (props) => {
   }
 
   const barListItems = bars_near_me.map((data) =>
-    <div onClick={ () => { handleClickBar(data.name) }}>
-      <h1>{ data.name }</h1>
+    <div className="bar_list_item" onClick={ () => { handleClickBar(data.name) }}>
+      <h2>{ data.name }</h2>
       <p>{ data.address }</p>
     </div>
   );
