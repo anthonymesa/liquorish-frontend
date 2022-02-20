@@ -56,11 +56,9 @@ const Home = (props) => {
   }
 
   const barListItems = bars_near_me.map((data) =>
-    <div>
-      <button onClick={ () => { handleClickBar(data.name) }}>
-        <h1>{ data.name }</h1>
-        <p>{ data.address }</p>
-      </button>
+    <div onClick={ () => { handleClickBar(data.name) }}>
+      <h1>{ data.name }</h1>
+      <p>{ data.address }</p>
     </div>
   );
 

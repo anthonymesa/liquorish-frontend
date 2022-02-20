@@ -3,6 +3,8 @@ import './Login.css';
 import React from 'react';
 import logo from '../media/logo.svg';
 import { useNavigate } from "react-router-dom";
+import { history } from 'react-router';
+import ValidateAuth from '../Auth';
 
 //  Closest I can get to a javascript enum
 const FormType = {
@@ -54,6 +56,8 @@ const LoginFormUser = (props) => {
   const usernameInput = React.useRef(null);
   const passwordInput = React.useRef(null);
 
+  const { setAuth, is_auth } = ValidateAuth()
+
   const handleUsernameChange = () => {
     setUsername(usernameInput.current.value)
   }
@@ -63,11 +67,9 @@ const LoginFormUser = (props) => {
   }
 
   const completeLogin = async () => {
-    localStorage.setItem('blob', JSON.stringify({
-      value1: "something",
-      value2: "something else"
-    }));
-    navigate("home/user");
+    setAuth(true, () => {
+      navigate("home/user");
+    });
   }
 
   const handleSignIn = async () => {
@@ -168,12 +170,10 @@ const PolyForm = (props) => {
   {
     case FormType.User:
       return <LoginFormUser 
-        applicationState={ props.applicationState } 
         setFormTypeHanlder={ setFormType }
       />
     case FormType.Bar:
       return <LoginFormBar 
-        applicationState={ props.applicationState } 
         setFormTypeHanlder={ setFormType }
       />
   }
@@ -186,7 +186,7 @@ const Login = (props) => {
       <div id="login_page">
         <div className="wrapper column">
           <LoginHeader />
-          <PolyForm applicationState={ props.applicationState }/>
+          <PolyForm />
         </div>
       </div>
     </div>
