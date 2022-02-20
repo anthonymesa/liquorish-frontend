@@ -1,0 +1,28 @@
+
+#greeting {
+    flex-grow: 1;
+    margin: auto 0;
+    margin-left: 20px;
+    text-align: left;
+}
+
+#settings_button {
+    flex-grow: 0;
+    margin: auto 0;
+    margin-right: 20px;
+}
+
+.bar_list_item::before {
+}
+
+.bar_list_item {
+    margin: 20px;
+    border-radius: 5px;
+    background: rgb(32, 32, 32);
+    border-radius: 10px;
+    border-color: rgb(66, 66, 66);
+    border-style: solid;
+    filter: drop-shadow(0 0 0.5rem black);
+    padding: 20px;
+    overflow: hidden;
+}
