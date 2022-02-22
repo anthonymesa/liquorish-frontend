@@ -3,8 +3,9 @@ import './Login.css';
 import React from 'react';
 import logo from '../media/logo.svg';
 import { useNavigate } from "react-router-dom";
-import { history } from 'react-router';
 import ValidateAuth from '../Auth';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Row, Stack, Button, Alert, Image } from 'react-bootstrap';
 
 //  Closest I can get to a javascript enum
 const FormType = {
@@ -14,19 +15,20 @@ const FormType = {
 
 const LoginHeader = () => {
   return (
-    <div id="login_header">
-        <div className="row header">
-            <img src={ logo } width="200px" height="200px" alt="logo" />
-        </div>
-        <div className="row logoName">
-            <p>LIQUORISH</p>
-        </div>
-    </div>
+    <Stack id="login-header">
+      <Image id="login-logo" src={ logo }  width="200px" height="200px" alt="logo"/>
+      <div id="login-app-name">
+        <p>LIQUORISH</p>
+      </div>
+    </Stack>
   );
 }
 
-const createUserAlert = () => {
-  alert("Go to your local bar to sign up!");
+const createUserAlert = (setShowAlert) => {
+  setShowAlert(true);
+  setTimeout(() => {
+    setShowAlert(false);
+  }, 10000);
 }
 
 const invalidLoginAlert = () => {
@@ -37,14 +39,25 @@ const validateLogin = async (username, password, cb) => {
 
   const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
 
+  console.log(url)
+
   fetch(url).then(response => {
     if(response.ok) {
       return response.json();
     }
   }).then(data => {
-    console.log(data);
-    cb(data);
+    cb(data.status); //!! EXPECTING { 'status': 0 } or similar
   });
+}
+
+const AlertDismissable = (props) => {
+  return (
+    <Alert show={props.state} variant="primary" onClose={() => props.handler(false)} dismissible>
+      <p>
+        New users must sign up at a location providing Liquorish services.
+      </p>
+    </Alert>
+  )
 }
 
 const LoginFormUser = (props) => {
@@ -52,6 +65,9 @@ const LoginFormUser = (props) => {
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showAlert, setShowAlert] = React.useState(false);
+
+  console.log(showAlert);
 
   const usernameInput = React.useRef(null);
   const passwordInput = React.useRef(null);
@@ -66,7 +82,10 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
-  const completeLogin = async () => {
+  const completeLogin = async (client_id) => {
+
+    sessionStorage.setItem('client_id', client_id);
+
     setAuth(true, () => {
       navigate("home/user");
     });
@@ -74,35 +93,35 @@ const LoginFormUser = (props) => {
 
   const handleSignIn = async () => {
     await validateLogin(username, password, (response) => {
-      response === true ? completeLogin() : invalidLoginAlert();
+
+      response = 2; // DELETE THIS TO DO NORMAL LOGIN
+
+      response > -1 ? completeLogin(response) : invalidLoginAlert();
     });
   }
 
   return (
-    <div>
-        <div className="row desc">
-            <p>Sign in to user</p>
+    <Stack>
+        <Row>
+            <p id="login-direction">Sign in to user</p>
+        </Row>
+        <Row>
+          <Stack id="login-input-stack">
+            <input className="login-input" type="text" placeholder="Username" ref={ usernameInput } onChange={ handleUsernameChange }/>
+            <input className="login-input" type="password" placeholder="Password" ref={ passwordInput } onChange={ handlePasswordChange }/>
+          </Stack>
+        </Row>
+        <Row>
+          <Stack>
+            <Button className="login-button" variant="primary" onClick={ handleSignIn }>Sign In</Button>
+            <Button className="login-button" variant="secondary" onClick={ () => { createUserAlert(setShowAlert) }}>Sign Up</Button>
+            <Button className="login-button" variant="secondary" onClick={ () => { props.setFormTypeHanlder(FormType.Bar) } }>Sign in to bar</Button>
+          </Stack>
+        </Row>
+        <div className="page_alert">
+          <AlertDismissable state={showAlert} handler={setShowAlert}/>
         </div>
-        <div className="bodyContent">
-            <div className="row">
-                <form>
-                    <input id="user_username" type="text" placeholder="Username" ref={ usernameInput } onChange={ handleUsernameChange }/>
-                </form>
-            </div>
-            <div className="row">
-                <input id="user_password" type="password" placeholder="Password" ref={ passwordInput } onChange={ handlePasswordChange }/>
-            </div>
-        </div>
-        <div className="row">
-          <button className="btnPrimary" onClick={ handleSignIn }>Sign In</button>
-        </div>
-        <div className="row">
-            <button className="btnSecondary" onClick={ createUserAlert }>Sign Up</button>
-        </div>
-        <div className="row footer">
-          <button className="btnSecondary" onClick={ () => { props.setFormTypeHanlder(FormType.Bar) } }>Sign in as bar</button>
-        </div>
-    </div>
+    </Stack>
   );
 }
 
@@ -132,30 +151,24 @@ const LoginFormBar = (props) => {
   }
 
   return (
-    <div>
-        <div className="row desc">
-            <p>Sign in to Bar</p>
-        </div>
-        <div className="bodyContent">
-            <div className="row">
-                <form>
-                    <input id="user_username" type="text" placeholder="Username" ref={ barUsernameInput } onChange={ handleBarUsernameChange }/>
-                </form>
-            </div>
-            <div className="row">
-                <input id="user_password" type="password" placeholder="Password" ref={ passwordInput } onChange={ handlePasswordChange }/>
-            </div>
-        </div>
-        <div className="row">
-          <button className="btnPrimary" onClick={ handleSignIn }>Sign In</button>
-        </div>
-        <div className="row">
-            <button className="btnSecondary" onClick={ handleCreateBar }>Register Bar</button>
-        </div>
-        <div className="row footer">
-          <button className="btnSecondary" onClick={ () => { props.setFormTypeHanlder(FormType.User) } }>Sign in as user</button>
-        </div>
-    </div>
+    <Stack>
+      <Row>
+        <p id="login-direction">Sign in to Bar</p>
+      </Row>
+      <Row>
+        <Stack id="login-input-stack">
+          <input className="login-input" type="text" placeholder="Username" ref={ barUsernameInput } onChange={ handleBarUsernameChange }/>
+          <input className="login-input" type="password" placeholder="Password" ref={ passwordInput } onChange={ handlePasswordChange }/>
+        </Stack>
+      </Row>
+      <Row>
+        <Stack>
+          <Button className="login-button" variant="primary" onClick={ handleSignIn }>Sign In</Button>
+          <Button className="login-button" variant="secondary" onClick={ handleCreateBar }>Register Bar</Button>
+          <Button className="login-button" variant="secondary" onClick={ () => { props.setFormTypeHanlder(FormType.User) } }>Sign in as user</Button>
+        </Stack>
+      </Row>
+    </Stack>
   );
 }
 
@@ -182,13 +195,11 @@ const PolyForm = (props) => {
 const Login = (props) => {
 
   return (
-    <div>
-      <div id="login_page">
-        <div className="wrapper column">
-          <LoginHeader />
-          <PolyForm />
-        </div>
-      </div>
+    <div className="root" id="login-root">
+      <Row id="login-contents">
+        <LoginHeader />
+        <PolyForm />
+      </Row>
     </div>
   );
 }
