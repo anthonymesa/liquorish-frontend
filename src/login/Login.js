@@ -84,7 +84,7 @@ const LoginFormUser = (props) => {
 
   const completeLogin = async (client_id) => {
 
-    sessionStorage.setItem('client_id', JSON.stringify(client_id));
+    sessionStorage.setItem('client_id', client_id);
 
     setAuth(true, () => {
       navigate("home/user");
@@ -93,6 +93,9 @@ const LoginFormUser = (props) => {
 
   const handleSignIn = async () => {
     await validateLogin(username, password, (response) => {
+
+      response = 2; // DELETE THIS TO DO NORMAL LOGIN
+
       response > -1 ? completeLogin(response) : invalidLoginAlert();
     });
   }

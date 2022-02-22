@@ -4,19 +4,20 @@ import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { FiMenu } from 'react-icons/fi'
+import { Row, Stack, Button, Alert, Image, Col } from 'react-bootstrap';
 
 const Header = (props) => {
   let username = (props === null ? 'unknown' : props.username);
   
   return (
-    <div className="header">
-      <div id="greeting">
-        <p>Welcome { username }</p>
-      </div>
-      <div id="settings_button">
-        <div><FiMenu size="2em" onClick={ () => { console.log("go to settings...")} }/></div>
-      </div>
-    </div>
+    <Row className="header">
+      <Col id="greeting">
+        <Row>Welcome { username }</Row>
+      </Col>
+      <Col id="settings_button">
+        <FiMenu size="2em" onClick={ () => { console.log("go to settings...")} }/>
+      </Col>
+    </Row>
   )
 }
 
@@ -55,8 +56,12 @@ const BarList = (props) => {
 
   const barListItems = bars_near_me.map((bar_data) =>
     <div className="bar_list_item" onClick={ () => { handleClickBar(bar_data) }}>
-      <h2>{ bar_data.name }</h2>
-      <p>{ bar_data.address }</p>
+      <Row>
+        <h2>{ bar_data.name }</h2>
+      </Row>
+      <Row>
+        <p>{ bar_data.address }</p>
+      </Row>
     </div>
   );
 
@@ -73,7 +78,7 @@ const Home = (props) => {
   const [username, setUsername] = React.useState("");
 
   useEffect(() => {
-    let client_id = JSON.parse(sessionStorage.getItem('client_id'));
+    let client_id = sessionStorage.getItem('client_id');
 
     setUserId(client_id);
 
@@ -90,7 +95,7 @@ const Home = (props) => {
   }, []);
 
   return (
-    <div>
+    <div className="root" id="home-root">
       <Header username={username}/>
       <BarList user_id={user_id}/>
     </div>
