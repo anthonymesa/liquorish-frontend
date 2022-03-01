@@ -1,16 +1,15 @@
 
-import './Settings.css';
+import './settings/Settings.css';
 import React from 'react';
-import logo from '../media/logo.svg';
+import ReactDOM from 'react-dom';
 import { useNavigate } from "react-router-dom";
 
-//  Closest I can get to a javascript enum
 const FormType = {
   User: Symbol("user"),
-  Bar: Symbol("bar")
+  Drinks: Symbol("drinks")
 }
 
-const LoginHeader = () => {
+const SettingsHeader = () => {
   return (
     <div id="settings_header">
         <div className="row header">
@@ -24,29 +23,7 @@ const invalidLoginAlert = () => {
     alert("Current password is incorrect.");
 }
 
-const getHash = async (username, password) => {
-    const utf8 = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-    return hashHex;
-}
-
-const validateLogin = async (username, password) => {
-  let hashValue = await getHash(username, password);
-
-  let url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + hashValue.toUpperCase();
-  console.log(url);
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", url, false); // false for synchronous request
-  xmlHttp.send(null);
-  
-  return xmlHttp.responseText;
-}
-
-const LoginFormUser = (props) => {
+const SettingsFormUser = (props) => {
   let navigate = useNavigate();
 
   // added for Settings A3
@@ -76,17 +53,32 @@ const LoginFormUser = (props) => {
     Setinputconfirmnewpassword(confirmNewPasswordInput.current.value)
   }
 
-  const completeLogin = async () => {
-    // need to get client ID and pass it up to index
-    navigate("home/user", { replace: true });
+  function handleCityState(props) {
+    const element = (
+      <div>
+        <h1>handleCityState - Not implemented yet!</h1>
+      </div>
+    );
+    ReactDOM.render(element, document.getElementById('root'));
   }
 
-  // validate the current password.
-  const handleSignIn = async () => {
-    const response = await validateLogin(username, inputcurrentpassword);
-    response === "true" ? completeLogin() : invalidLoginAlert();
+  function handleReset(props) {
+    const element = (
+      <div>
+        <h1>handleReset - Not implemented yet!</h1>
+      </div>
+    );
+    ReactDOM.render(element, document.getElementById('root'));
   }
-
+  
+  function logoutUser(props) {
+    const element = (
+      <div>
+        <h1>logoutUser - Not implemented yet!</h1>
+      </div>
+    );
+    ReactDOM.render(element, document.getElementById('root'));
+  }
   // add function to validate the user has entered the new password and confirm new password same
   // If same, reset the password, not same prompt user to enter the password again.
 
@@ -128,13 +120,76 @@ const LoginFormUser = (props) => {
         <div className="row">
             <button className="btnSecondary" onClick={ logoutUser }>Log Out</button>
         </div>
-        <div className="row footer">
-           <div className="row">
-              <p>Saved Drinks</p>
-           </div>
+      </div>
+  );
+}
+
+const DrinksFormUser = (props) => {
+
+  const listDrinks = () => {
+    return [
+      {
+        name: "Glenfiddich Whiskey",
+      },
+      {
+        name: "Captain Morgan Spiced Rum",
+      },
+      {
+        name: "Flying Horse Beer",
+      }
+    ]
+  }
+
+  const barListItems = listDrinks.map((data) =>
+    <div>
+        <h1>{ data.name }</h1>
+    </div>
+  );
+
+  const Header = () => {
+    return (
+      <div>
+        <div>Saved Drinks</div>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <Header />
+      { barListItems }
+    </div>
+  )
+}
+
+
+const Settings = (props) => {
+  return (
+    <div>
+      <div id="settings_page">
+        <div className="wrapper column">
+          <SettingsHeader />
+          <SettingsFormUser applicationState={ props.applicationState }/>
         </div>
+      </div>
     </div>
   );
 }
+
+const Drinks = (props) => {
+  return (
+    <div>
+      <div id="drinks_page">
+        <div className="wrapper column">
+          <DrinksFormUser applicationState={ props.applicationState }/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+export default Settings;
+export { Drinks };
 
 // end of additions for Settings A3
