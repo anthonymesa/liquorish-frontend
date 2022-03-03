@@ -8,7 +8,6 @@ import './App.css';
 // Import our main page modules.
 import Login from './login/Login';
 import Home from './home/Home';
-import Dashboard from './dashboard/Dashboard'
 import ValidateAuth from './Auth';
 
 const App = (props) => {
@@ -29,7 +28,6 @@ const App = (props) => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="home/user" element={<Home />} />
-        <Route path="dashboard" element={<Dashboard />} />
         <Route path="*" element={         
           <main>
             <img src='https://i.ytimg.com/vi/KEkrWRHCDQU/maxresdefault.jpg' />
