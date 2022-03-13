@@ -93,9 +93,6 @@ const LoginFormUser = (props) => {
 
   const handleSignIn = async () => {
     await validateLogin(username, password, (response) => {
-
-      response = 2; // DELETE THIS TO DO NORMAL LOGIN
-
       response > -1 ? completeLogin(response) : invalidLoginAlert();
     });
   }
