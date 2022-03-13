@@ -46,7 +46,7 @@ const validateLogin = async (username, password, cb) => {
       return response.json();
     }
   }).then(data => {
-    cb(data.status); //!! EXPECTING { 'status': 0 } or similar
+    cb(data); //!! EXPECTING { 'status': 0 } or similar
   });
 }
 
@@ -92,8 +92,24 @@ const LoginFormUser = (props) => {
   }
 
   const handleSignIn = async () => {
+    
+    /**
+     * Call validateLogin with the password and username, and then pass it an anonymous
+     * function to be used as a callback so that we can define custom actions to take
+     * when validation is successful.
+     * 
+     * The anonymous function should provide a response object that contains two 
+     * values, an integer designating the success status of the db call and the value object
+     * containing the data returned from the call, which in this case should be a single 
+     * object attribute "client id", an integer representation of the user_id
+     * that is successfully signed in.
+     */
     await validateLogin(username, password, (response) => {
-      response > -1 ? completeLogin(response) : invalidLoginAlert();
+      if(response.status == 0){
+        response.value["client id"] > -1 ? completeLogin(response.value["client id"]) : invalidLoginAlert();
+      } else {
+        invalidLoginAlert();
+      }
     });
   }
 
