@@ -15,9 +15,17 @@ export default function ValidateAuth() {
   });
 
   useEffect(() => {
+    let mounted = true;
+
     getAuth.then((auth_value) => {
-      setIsAuth(auth_value);
+      if(mounted){
+        setIsAuth(auth_value);
+      }
     });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   /**

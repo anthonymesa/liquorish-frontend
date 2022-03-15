@@ -28,10 +28,9 @@ const App = (props) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="home/user" element={<Home />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="*" element={<Navigate to="/"/>} />
+        <Route path="/home/user" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<Navigate to="/home/user"/>} />
       </Routes>
     </BrowserRouter>
   )
