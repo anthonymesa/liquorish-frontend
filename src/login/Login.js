@@ -35,18 +35,16 @@ const invalidLoginAlert = () => {
   alert("Username or password is incorrect.");
 }
 
-const validateLogin = async (username, password, cb) => {
+const validateLogin = (username, password) => {
+  return new Promise(async (resolve, reject) => {
+    const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
 
-  const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
+  
+    console.log("validate: " + JSON.stringify(jsonResponse.value))
 
-  console.log(url)
-
-  fetch(url).then(response => {
-    if(response.ok) {
-      return response.json();
-    }
-  }).then(data => {
-    cb(data.status); //!! EXPECTING { 'status': 0 } or similar
+    resolve(jsonResponse.value)
   });
 }
 
@@ -61,13 +59,11 @@ const AlertDismissable = (props) => {
 }
 
 const LoginFormUser = (props) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showAlert, setShowAlert] = React.useState(false);
-
-  console.log(showAlert);
 
   const usernameInput = React.useRef(null);
   const passwordInput = React.useRef(null);
@@ -82,21 +78,33 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
-  const completeLogin = async (client_id) => {
+  const handleSignIn = () => {
 
-    sessionStorage.setItem('client_id', client_id);
+    return new Promise((resolve, reject) => {
+      validateLogin(username, password).then((_response) => {
 
-    setAuth(true, () => {
-      navigate("home/user");
-    });
-  }
+        /**
+         * If the response status is not 0 'success' or the client id is negative,
+         * then there was an error and the invalid login alert should be displayed.
+         * 
+         * It is technically possible that response.value COULD be null here, but that
+         * would need to be fixed in the backend. We should expect that a response status
+         * of 0 means that the value is non-null.
+         */
+        if(_response && (_response["client id"] < 0))
+        {
+          invalidLoginAlert();
+          reject();
+        }
+    
+        sessionStorage.setItem('client_id', _response["client id"]);
 
-  const handleSignIn = async () => {
-    await validateLogin(username, password, (response) => {
-
-      response = 2; // DELETE THIS TO DO NORMAL LOGIN
-
-      response > -1 ? completeLogin(response) : invalidLoginAlert();
+        setAuth(true).then(() => {
+          navigate("/home/user", { replace: true });
+        });
+        
+        resolve();
+      })
     });
   }
 
