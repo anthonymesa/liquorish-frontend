@@ -1,0 +1,25 @@
+
+.root {
+  height: 100vh;
+  width: 100vw;
+  color: white;
+}
+
+.header {
+  height: 100px;
+  display: flex;
+  background: rgb(37, 37, 37);
+  filter: drop-shadow(0 0 0.75rem black);
+  z-index: 100;
+}
+
+.page_alert {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  bottom: 20px;
+  font-size: small;
+  left: 50%;
+  padding: 10px;
+  transform: translate(-50%, 0);
+}
