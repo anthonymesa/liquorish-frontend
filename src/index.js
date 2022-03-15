@@ -9,6 +9,7 @@ import './App.css';
 import Login from './login/Login';
 import Home from './home/Home';
 import Dashboard from './dashboard/Dashboard'
+import Settings from './settings/Settings'
 import ValidateAuth from './Auth';
 
 const App = (props) => {
@@ -23,17 +24,18 @@ const App = (props) => {
         </Routes>
       </BrowserRouter>
     )
+  } else {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/home/user" element={<Home />} />
+          <Route path="/home/user/settings" element={<Settings />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<Navigate to="/home/user"/>} />
+        </Routes>
+      </BrowserRouter>
+    )
   }
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/home/user" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="*" element={<Navigate to="/home/user"/>} />
-      </Routes>
-    </BrowserRouter>
-  )
 }
 
 //  This renders the code generated in the React.StrictMode 

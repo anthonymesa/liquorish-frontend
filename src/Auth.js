@@ -19,6 +19,7 @@ export default function ValidateAuth() {
 
     getAuth.then((auth_value) => {
       if(mounted){
+        console.log(auth_value)
         setIsAuth(auth_value);
       }
     });

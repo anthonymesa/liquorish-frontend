@@ -42,13 +42,16 @@ const getBarList = new Promise(async (resolve, reject) => {
  * @returns 
  */
 const Header = (props) => {
+
+  const navigate = useNavigate();
+
   return (
     <Row className="header">
       <Col id="greeting">
         <Row><h3>Welcome { props.username }</h3></Row>
       </Col>
       <Col id="settings_button">
-        <FiMenu size="2em" onClick={ () => { console.log("go to settings...")} }/>
+        <FiMenu size="2em" onClick={ () => { navigate("/home/user/settings", { replace: true });} }/>
       </Col>
     </Row>
   )

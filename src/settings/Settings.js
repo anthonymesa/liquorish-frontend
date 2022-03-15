@@ -1,7 +1,8 @@
 
-import './settings/Settings.css';
+import './Settings.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { FiChevronLeft } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
 
 const FormType = {
@@ -10,17 +11,24 @@ const FormType = {
 }
 
 const SettingsHeader = () => {
+  const navigate = useNavigate();
+
+  const handleHome = () => {
+    sessionStorage.removeItem('bar')
+    navigate("/home/user", { replace: true });
+  }
+
   return (
-    <div id="settings_header">
-        <div className="row header">
-        <p>Settings</p>
-        </div>
+    <div className="header">
+      <div id="settings_nav" onClick={() => { handleHome() }}>
+        <FiChevronLeft /> Home
+      </div>
     </div>
   );
 }
 
 const invalidLoginAlert = () => {
-    alert("Current password is incorrect.");
+  alert("Current password is incorrect.");
 }
 
 const SettingsFormUser = (props) => {
@@ -70,7 +78,7 @@ const SettingsFormUser = (props) => {
     );
     ReactDOM.render(element, document.getElementById('root'));
   }
-  
+
   function logoutUser(props) {
     const element = (
       <div>
@@ -82,45 +90,45 @@ const SettingsFormUser = (props) => {
   // add function to validate the user has entered the new password and confirm new password same
   // If same, reset the password, not same prompt user to enter the password again.
 
-  
+
   return (
     <div>
-        <div className="row desc">
-           <div className="row">
-            <p>BenderactCommandband</p>
-           </div>
-           <div className="row">
-            <p>Birth Date: 1987-06-16</p>
-           </div>
-        </div>
-        <div className="bodyContent">
-           <div className="row">
-              <p>City: Burlington, NC</p>
-           </div>
-            <div className="row">
-                <form>
-                    <input id="user_city_state" type="text" placeholder="(inputnewcityandstate)" ref={ usercitystate } onChange={ handleCityStateChange }/>
-                    <button className="btnPrimary" onClick={ handleCityState }>Search</button>
-                </form>
-            </div>
-            <div className="row">
-            <p>Reset Password</p>
-           </div>
-            <div className="row">
-                <input id="user_currentpassword" type="password" placeholder="(inputcurrentpassword)" ref={ currentPasswordInput } onChange={ handleCurrentPasswordChange }/>
-            </div>
-            <div className="row">
-                <input id="user_newpassword" type="password" placeholder="(inputnewpassword)" ref={ newPasswordInput } onChange={ handleNewPasswordChange }/>
-                <input id="user_confirmNewpassword" type="password" placeholder="(inputconfirmnewpassword)" ref={ confirmNewPasswordInput } onChange={ handleConfirmNewPasswordChange }/>
-            </div>
+      <div className="row desc">
+        <div className="row">
+          <p>BenderactCommandband</p>
         </div>
         <div className="row">
-          <button className="btnPrimary" onClick={ handleReset }>Reset</button>
-        </div>
-        <div className="row">
-            <button className="btnSecondary" onClick={ logoutUser }>Log Out</button>
+          <p>Birth Date: 1987-06-16</p>
         </div>
       </div>
+      <div className="bodyContent">
+        <div className="row">
+          <p>City: Burlington, NC</p>
+        </div>
+        <div className="row">
+          <form>
+            <input id="user_city_state" type="text" placeholder="(inputnewcityandstate)" ref={usercitystate} onChange={handleCityStateChange} />
+            <button className="btnPrimary" onClick={handleCityState}>Search</button>
+          </form>
+        </div>
+        <div className="row">
+          <p>Reset Password</p>
+        </div>
+        <div className="row">
+          <input id="user_currentpassword" type="password" placeholder="(inputcurrentpassword)" ref={currentPasswordInput} onChange={handleCurrentPasswordChange} />
+        </div>
+        <div className="row">
+          <input id="user_newpassword" type="password" placeholder="(inputnewpassword)" ref={newPasswordInput} onChange={handleNewPasswordChange} />
+          <input id="user_confirmNewpassword" type="password" placeholder="(inputconfirmnewpassword)" ref={confirmNewPasswordInput} onChange={handleConfirmNewPasswordChange} />
+        </div>
+      </div>
+      <div className="row">
+        <button className="btnPrimary" onClick={handleReset}>Reset</button>
+      </div>
+      <div className="row">
+        <button className="btnSecondary" onClick={logoutUser}>Log Out</button>
+      </div>
+    </div>
   );
 }
 
@@ -142,7 +150,7 @@ const DrinksFormUser = (props) => {
 
   const barListItems = listDrinks.map((data) =>
     <div>
-        <h1>{ data.name }</h1>
+      <h1>{data.name}</h1>
     </div>
   );
 
@@ -157,7 +165,7 @@ const DrinksFormUser = (props) => {
   return (
     <div>
       <Header />
-      { barListItems }
+      {barListItems}
     </div>
   )
 }
@@ -169,7 +177,7 @@ const Settings = (props) => {
       <div id="settings_page">
         <div className="wrapper column">
           <SettingsHeader />
-          <SettingsFormUser applicationState={ props.applicationState }/>
+          <SettingsFormUser applicationState={props.applicationState} />
         </div>
       </div>
     </div>
@@ -181,7 +189,7 @@ const Drinks = (props) => {
     <div>
       <div id="drinks_page">
         <div className="wrapper column">
-          <DrinksFormUser applicationState={ props.applicationState }/>
+          <DrinksFormUser applicationState={props.applicationState} />
         </div>
       </div>
     </div>
