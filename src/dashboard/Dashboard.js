@@ -89,6 +89,8 @@ const Dashboard = () => {
 
     let bar = JSON.parse(sessionStorage.getItem('bar'));
     setBar(bar);
+
+    console.log(bar)
     
     const url = 'http://liquorish-server.azurewebsites.net/tab/' + client_id + '/' + bar.id;
 
