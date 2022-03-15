@@ -78,14 +78,6 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
-  const completeLogin = (client_id) => {
-
-    sessionStorage.setItem('client_id', client_id);
-    setAuth(true).then(() => {
-      navigate("/home/user", { replace: true });
-    });
-  }
-
   const handleSignIn = () => {
 
     return new Promise((resolve, reject) => {
@@ -105,7 +97,12 @@ const LoginFormUser = (props) => {
           reject();
         }
     
-        completeLogin(_response["client id"]);
+        sessionStorage.setItem('client_id', _response["client id"]);
+
+        setAuth(true).then(() => {
+          navigate("/home/user", { replace: true });
+        });
+        
         resolve();
       })
     });
