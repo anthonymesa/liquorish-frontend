@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Connect CSS stylesheet.
 import './App.css';
@@ -18,7 +18,8 @@ const App = (props) => {
     return (
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Navigate to="/"/>} />
         </Routes>
       </BrowserRouter>
     )
@@ -30,11 +31,7 @@ const App = (props) => {
         <Route path="/" element={<Home />} />
         <Route path="home/user" element={<Home />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="*" element={         
-          <main>
-            <img src='https://i.ytimg.com/vi/KEkrWRHCDQU/maxresdefault.jpg' />
-          </main> 
-        } />
+        <Route path="*" element={<Navigate to="/"/>} />
       </Routes>
     </BrowserRouter>
   )

@@ -90,7 +90,7 @@ const BarList = (props) => {
    */
   const handleClickBar = (_bar_data) => {
     sessionStorage.setItem('bar', JSON.stringify(_bar_data));
-    navigate("../dashboard", { replace: true });
+    navigate("/dashboard", { replace: true });
   }
 
   /**

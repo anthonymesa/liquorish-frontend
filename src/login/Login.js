@@ -35,18 +35,16 @@ const invalidLoginAlert = () => {
   alert("Username or password is incorrect.");
 }
 
-const validateLogin = async (username, password, cb) => {
+const validateLogin = (username, password) => {
+  return new Promise(async (resolve, reject) => {
+    const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
 
-  const url = 'http://liquorish-server.azurewebsites.net/login/' + username + '/' + password;
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
+  
+    console.log("validate: " + JSON.stringify(jsonResponse.value))
 
-  console.log(url)
-
-  fetch(url).then(response => {
-    if(response.ok) {
-      return response.json();
-    }
-  }).then(data => {
-    cb(data); //!! EXPECTING { 'status': 0 } or similar
+    resolve(jsonResponse.value)
   });
 }
 
@@ -61,13 +59,11 @@ const AlertDismissable = (props) => {
 }
 
 const LoginFormUser = (props) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showAlert, setShowAlert] = React.useState(false);
-
-  console.log(showAlert);
 
   const usernameInput = React.useRef(null);
   const passwordInput = React.useRef(null);
@@ -82,34 +78,36 @@ const LoginFormUser = (props) => {
     setPassword(passwordInput.current.value)
   }
 
-  const completeLogin = async (client_id) => {
+  const completeLogin = (client_id) => {
 
     sessionStorage.setItem('client_id', client_id);
-
-    setAuth(true, () => {
-      navigate("home/user");
+    setAuth(true).then(() => {
+      navigate("/home/user", { replace: true });
     });
   }
 
-  const handleSignIn = async () => {
+  const handleSignIn = () => {
+
+    return new Promise((resolve, reject) => {
+      validateLogin(username, password).then((_response) => {
+
+        /**
+         * If the response status is not 0 'success' or the client id is negative,
+         * then there was an error and the invalid login alert should be displayed.
+         * 
+         * It is technically possible that response.value COULD be null here, but that
+         * would need to be fixed in the backend. We should expect that a response status
+         * of 0 means that the value is non-null.
+         */
+        if(_response && (_response["client id"] < 0))
+        {
+          invalidLoginAlert();
+          reject();
+        }
     
-    /**
-     * Call validateLogin with the password and username, and then pass it an anonymous
-     * function to be used as a callback so that we can define custom actions to take
-     * when validation is successful.
-     * 
-     * The anonymous function should provide a response object that contains two 
-     * values, an integer designating the success status of the db call and the value object
-     * containing the data returned from the call, which in this case should be a single 
-     * object attribute "client id", an integer representation of the user_id
-     * that is successfully signed in.
-     */
-    await validateLogin(username, password, (response) => {
-      if(response.status == 0){
-        response.value["client id"] > -1 ? completeLogin(response.value["client id"]) : invalidLoginAlert();
-      } else {
-        invalidLoginAlert();
-      }
+        completeLogin(_response["client id"]);
+        resolve();
+      })
     });
   }
 
