@@ -5,13 +5,41 @@
 
 #bar_head {
     position: relative;
-    height: 500px;
+    height: 400px;
     width: 100%;
-    background: red;
+}
+
+#home_nav {
+  font-size: x-large;
+  float: left;
+  padding: 20px 0;
+  padding-left: 20px;
+}
+
+#bar_info::before{
+  content: '';
+  position: absolute;
+  width:100%;
+  height: 100%;
+  background-position-y: 50%;
+  background-size: cover;
+  background-image: url(https://www.studyfinds.org/wp-content/uploads/2019/07/alcohol-bar-beer-1283219.jpg);
+  filter:blur(10px);
+
 }
 
 #bar_info {
     position: relative;
+    height: 100%;
+}
+
+#bar_info_container {
+  position: absolute;
+  width: 75%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 #tab_pay {
