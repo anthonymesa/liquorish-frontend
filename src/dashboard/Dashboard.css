@@ -45,8 +45,10 @@
 #tab_pay {
     position: relative;
     width: 100%;
-    height: 100px;
-    background: blue;
+    padding: 20px;
+    background: rgb(37, 37, 37);
+    filter: drop-shadow(0 0 0.75rem black);
+    z-index: 100;
 }
 
 #tab_list {

@@ -77,7 +77,6 @@ const BarList = (props) => {
    * set the state for the bar list.
    */
   getBarList.then((_bar_list) => {
-    console.log(_bar_list)
     setBarList(_bar_list);
   });
   

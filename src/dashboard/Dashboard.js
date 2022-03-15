@@ -4,17 +4,22 @@ import React, { useEffect } from 'react';
 
 import { FiPlusCircle } from 'react-icons/fi';
 import { FiChevronLeft } from 'react-icons/fi';
-import { Row, Col, Stack } from 'react-bootstrap';
+import { Row, Col, Button, Stack } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
 const BarHead = (props) => {
   const navigate = useNavigate();
 
+  const handleHome = () => {
+    sessionStorage.removeItem('bar')
+    navigate("/home/user", { replace: true }); 
+  }
+
   return (
     <Row className="g-0" id="bar_head">
       <Stack>
         <div className="header">
-          <div id="home_nav" onClick={() => { navigate("/home/user", { replace: true });}}>
+          <div id="home_nav" onClick={() => { handleHome() }}>
             <FiChevronLeft /> Home
           </div>
         </div>
@@ -30,42 +35,50 @@ const BarHead = (props) => {
 }
 
 const TabPay = () => {
+
+  const handleSignIn = () => {
+    console.log("paying for tab...")
+  }
+
   return (
-    <Row className="g-0" id="tab_pay"></Row>
+    <Row className="g-0" id="tab_pay">
+      <Button className="login-button" variant="primary" onClick={handleSignIn}>Pay for tab</Button>
+    </Row>
   )
 }
 
-const getSavedDrinks = (tab_id, user_id) => {
-  return [
-    {
-      id: 13,
-      name: "Classic Whisky Sour",
-      price: 14.23,
-      status: 0
-    },
-    {
-      id: 3,
-      name: "Jameson and Ginger",
-      price: 8.2,
-      status: 1
-    }
-  ]
-}
+// const getTabDrinks = new Promise(async (resolve, reject) => {
+//   const client_id = sessionStorage.getItem('client_id');
+
+//   const url = 'http://liquorish-server.azurewebsites.net/user/' + client_id;
+
+//   const response = await fetch(url);
+//   const jsonResponse = await response.json();
+
+//   resolve(jsonResponse.value)
+// });
+
 
 const TabList = (props) => {
-  const saved_drinks = getSavedDrinks(props.user_id);
 
-  const savedDrinks = saved_drinks.map((drink_data) => {
-    <div>
-      <Row>
-        <h2>{drink_data.name}</h2>
-      </Row>
-    </div>
-  });
+  // const [tab_drinks, setTabDrinks] = React.useState([])
+
+  // getTabDrinks.then((_tab_drinks) => {
+  //   console.log(_tab_drinks)
+  //   setTabDrinks(_tab_drinks);
+  // });
+
+  // const tab_drinks_dom = tab_drinks.map((drink_data) => {
+  //   <div>
+  //     <Row>
+  //       <h2>{drink_data["drink_name"]}</h2>
+  //     </Row>
+  //   </div>
+  // });
 
   return (
     <Row className="g-0" id="tab_list">
-      {savedDrinks}
+      {/* {tab_drinks_dom} */}
     </Row>
   )
 }
@@ -107,11 +120,6 @@ const Dashboard = () => {
 
     let bar = JSON.parse(sessionStorage.getItem('bar'));
     setBar(bar);
-
-    // getTab(client_id, bar["id"]).then((_tab) => {
-    //   setTabId(_tab["id"]);
-    // })
-
   }, []);
 
   return (
@@ -119,7 +127,7 @@ const Dashboard = () => {
       <Stack id="dashboard_contents">
         <BarHead bar={bar} />
         <TabPay tab_id={tab_id} user_id={user_id} />
-        <TabList tab_id={tab_id} user_id={user_id} />
+        <TabList bar_id={bar["id"]} user_id={user_id} />
       </Stack>
       <AddItemToOrder />
     </div>
