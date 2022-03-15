@@ -8,7 +8,6 @@ import './App.css';
 // Import our main page modules.
 import Login from './login/Login';
 import Home from './home/Home';
-import Dashboard from './dashboard/Dashboard'
 import ValidateAuth from './Auth';
 
 const App = (props) => {
