@@ -4,20 +4,20 @@ import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { FiMenu } from 'react-icons/fi'
-import { Row, Stack, Button, Alert, Image, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 const Header = (props) => {
 
   return (
-    <div>
-      Header
-      {props.username}
-    </div>
+    <Row className="header">
+    <Col id="greeting">
+      <Row><h3>Welcome { props.username }</h3></Row>
+    </Col>
+    <Col id="settings_button">
+      <FiMenu size="2em" onClick={ () => { console.log("go to settings...")} }/>
+    </Col>
+  </Row>
   )
-}
-
-const handleClickBar = (_bar_data) => {
-  console.log(_bar_data["bar_name"])
 }
 
 const getBarList = new Promise(async (resolve, reject) => {
@@ -33,11 +33,17 @@ const getBarList = new Promise(async (resolve, reject) => {
 
 const BarList = (props) => {
   const [bar_list, setBarList] = React.useState([])
+  let navigate = useNavigate();
 
   getBarList.then((_bar_list) => {
     console.log(_bar_list)
     setBarList(_bar_list);
   });
+  
+  const handleClickBar = (_bar_data) => {
+    sessionStorage.setItem('bar', JSON.stringify(_bar_data));
+    navigate("../dashboard", { replace: true });
+  }
 
   const bar_list_dom = bar_list.map((bar_data) =>
     <div key={JSON.stringify(bar_data)} className="bar_list_item" onClick={() => { handleClickBar(bar_data) }}>
