@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Connect CSS stylesheet.
 import './App.css';
@@ -8,6 +8,8 @@ import './App.css';
 // Import our main page modules.
 import Login from './login/Login';
 import Home from './home/Home';
+import Dashboard from './dashboard/Dashboard'
+import Settings from './settings/Settings'
 import ValidateAuth from './Auth';
 
 const App = (props) => {
@@ -17,25 +19,23 @@ const App = (props) => {
     return (
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Navigate to="/"/>} />
+        </Routes>
+      </BrowserRouter>
+    )
+  } else {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/home/user" element={<Home />} />
+          <Route path="/home/user/settings" element={<Settings />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<Navigate to="/home/user"/>} />
         </Routes>
       </BrowserRouter>
     )
   }
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="home/user" element={<Home />} />
-        <Route path="*" element={         
-          <main>
-            <img src='https://i.ytimg.com/vi/KEkrWRHCDQU/maxresdefault.jpg' />
-          </main> 
-        } />
-      </Routes>
-    </BrowserRouter>
-  )
 }
 
 //  This renders the code generated in the React.StrictMode 
