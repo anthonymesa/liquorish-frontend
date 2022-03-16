@@ -36,19 +36,19 @@ const DrinkInfo = (props) => {
 }
 
 const getDrinkIngredientsDom = (drink_id) => {
-  return new Promise((resolve, reject) => {
-    // const url = 'http://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
+  return new Promise(async (resolve, reject) => {
+    const url = 'http://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
 
-    // const response = await fetch(url)
-    // const jsonResponse = await response.json();
+    console.log(url)
 
-    // resolve(jsonResponse.value)
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
 
-    const drink_ingredients_list = ['an ingredient'];
+    const drink_ingredients_list = jsonResponse.value;
 
     const drink_ingredients_dom = drink_ingredients_list.map((drink_ingredient) => 
-      <div>
-        { drink_ingredient }
+      <div key={ drink_ingredient.ingredient_id }>
+        { drink_ingredient.name }
       </div>
     );
 
@@ -60,9 +60,9 @@ const DrinkIngredients = (props) => {
 
   const [drink_ingredients_list, setDrinkIngredientsList] = React.useState([])
 
-  useEffect(() => {
-    getDrinkIngredientsDom(props.drink_id).then((drink_ingredient_dom) => {
-      setDrinkIngredientsList(drink_ingredient_dom)
+  useEffect(async () => {
+    await getDrinkIngredientsDom(props.drink["drink_id"]).then((drink_ingredient_dom) => {
+      setDrinkIngredientsList(drink_ingredient_dom);
     })
   }, [])
 
@@ -80,21 +80,38 @@ const DrinkIngredients = (props) => {
 
 const OrderView = () => {
 
-  const [drink, setDrink] = React.useState({})
+  const [drink, setDrink] = React.useState({});
 
+  /**
+   * This state allows us to control the page loading so that the drinkIngredients
+   * are only populated after the initial useEffect is finished.
+   */
+  const [loaded, setIsLoaded] = React.useState(false);
+
+  /**
+   * useEffect, runs only on component's first mount
+   */
   useEffect(() => {
     const drink_data = JSON.parse(sessionStorage.getItem('drink'));
 
     if(drink_data){
       setDrink(drink_data)
     }
+
+    /**
+     * now that the data has loaded, set the state to true, this will trigger the
+     * page to reload, and DrinkIngredients to display.
+     */
+    setIsLoaded(true)
   }, [])
 
   return (
     <div>
       <Header drink_price={ drink["price"] }/>
       <DrinkInfo drink={ drink }/>
-      <DrinkIngredients drink_id={drink["drink_id"]}/>
+      { loaded &&
+        <DrinkIngredients drink={drink}/>
+      }
     </div>
   );
 }
