@@ -43,7 +43,7 @@ const getBarList = new Promise(async (resolve, reject) => {
  */
 const Header = (props) => {
   return (
-    <Row className="header">
+    <Row className="g-0 header">
       <Col id="greeting">
         <Row><h3>Welcome { props.username }</h3></Row>
       </Col>
@@ -98,10 +98,10 @@ const BarList = (props) => {
    */
   const bar_list_dom = bar_list.map((bar_data) =>
     <div key={ JSON.stringify(bar_data) } className="bar_list_item" onClick={() => { handleClickBar(bar_data) }}>
-      <Row>
+      <Row className="g-0">
         <h2>{ bar_data.bar_name }</h2>
       </Row>
-      <Row>
+      <Row className="g-0">
         <p>{ bar_data.address_street }, 
         { bar_data.address_city}, 
         { bar_data.address_state }, 
