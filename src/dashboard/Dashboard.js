@@ -66,7 +66,8 @@ const TabList = (props) => {
 
   const [bar_drinks_dom, setBarDrinksDom] = React.useState(null)
 
-  const handleOrderView = () => {
+  const handleOrderView = (drink_data) => {
+    sessionStorage.setItem('drink', JSON.stringify(drink_data));
     navigate("/home/user/orderview", { replace: true });
   }
 
@@ -86,7 +87,7 @@ const TabList = (props) => {
     const tab_drinks = await test_promise()
 
     const tab_drinks_dom = await tab_drinks.map((drink_data) =>
-      <div key={drink_data["drink_name"]} className="tab_drink" onClick={ handleOrderView }>
+      <div key={drink_data["drink_name"]} className="tab_drink" onClick={ () => { handleOrderView(drink_data) }}>
         <Row >
           <h2>{drink_data["drink_name"]}</h2>
         </Row>
