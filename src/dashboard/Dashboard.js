@@ -66,9 +66,9 @@ const TabList = (props) => {
 
   const [bar_drinks_dom, setBarDrinksDom] = React.useState(null)
 
-  const handleOrderView = (drink_data) => {
-    sessionStorage.setItem('drink', JSON.stringify(drink_data));
-    navigate("/home/user/orderview", { replace: true });
+  const handleOrderView = async (drink_data) => {
+    await sessionStorage.setItem('drink', JSON.stringify(drink_data));
+    navigate("/dashboard/orderview", { replace: true });
   }
 
   const generateTabDrinksDom = async () => {

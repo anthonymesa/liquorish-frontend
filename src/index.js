@@ -30,8 +30,8 @@ const App = (props) => {
     <BrowserRouter>
       <Routes>
         <Route path="/home/user" element={<Home />} />
-        <Route path="/home/user/orderview" element={<OrderView />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/orderview" element={<OrderView />} />
         <Route path="*" element={<Navigate to="/home/user"/>} />
       </Routes>
     </BrowserRouter>
