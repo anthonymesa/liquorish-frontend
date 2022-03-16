@@ -62,8 +62,13 @@ const getTabDrinks = (bar_id, user_id) => {
 }
 
 const TabList = (props) => {
+  const navigate = useNavigate();
 
   const [bar_drinks_dom, setBarDrinksDom] = React.useState(null)
+
+  const handleOrderView = () => {
+    navigate("/home/user/orderview", { replace: true });
+  }
 
   const generateTabDrinksDom = async () => {
 
@@ -79,10 +84,10 @@ const TabList = (props) => {
     }
 
     const tab_drinks = await test_promise()
-    
+
     const tab_drinks_dom = await tab_drinks.map((drink_data) =>
-      <div key={drink_data["drink_name"]} className="tab_drink">
-        <Row>
+      <div key={drink_data["drink_name"]} className="tab_drink" onClick={ handleOrderView }>
+        <Row >
           <h2>{drink_data["drink_name"]}</h2>
         </Row>
       </div>
