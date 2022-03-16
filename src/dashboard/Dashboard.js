@@ -37,13 +37,13 @@ const BarHead = (props) => {
 
 const TabPay = () => {
 
-  const handleSignIn = () => {
+  const handleTabPay = () => {
     console.log("paying for tab...")
   }
 
   return (
     <Row className="g-0" id="tab_pay">
-      <Button className="login-button" variant="primary" onClick={handleSignIn}>Pay for tab</Button>
+      <Button id="tab_pay_button" variant="primary" onClick={handleTabPay}>Pay for tab</Button>
     </Row>
   )
 }
