@@ -17,7 +17,6 @@ const BarHead = (props) => {
 
   return (
     <Row className="g-0" id="bar_head">
-      <Stack>
         <div className="header">
           <div id="home_nav" onClick={() => { handleHome() }}>
             <FiChevronLeft /> Home
@@ -30,7 +29,6 @@ const BarHead = (props) => {
             <p>{props.bar["address_street"]}, {props.bar["address_city"]}, {props.bar["address_state"]}, {props.bar["address_zip"]}</p>
           </div>
         </div>
-      </Stack>
     </Row>
   )
 }
@@ -75,8 +73,6 @@ const TabList = (props) => {
 
     const test_promise = () => {
       return new Promise((resolve, reject) => {
-
-        console.log(props.bar_id, props.user_id)
 
         getTabDrinks(props.bar_id, props.user_id).then((tab_drinks) => {
           resolve(tab_drinks)
@@ -139,7 +135,7 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className="root" id="dashboard_root">
+    <div className="root">
       <Stack id="dashboard_contents">
         <BarHead bar={bar} />
         <TabPay tab_id={tab_id} user_id={user_id} />

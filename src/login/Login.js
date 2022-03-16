@@ -110,22 +110,22 @@ const LoginFormUser = (props) => {
 
   return (
     <Stack>
-        <Row>
+        <Row className="g-0">
             <p id="login-direction">Sign in to user</p>
         </Row>
-        <Row>
+        <Row className="g-0">
           <Stack id="login-input-stack">
             <input className="login-input" type="text" placeholder="Username" ref={ usernameInput } onChange={ handleUsernameChange }/>
             <input className="login-input" type="password" placeholder="Password" ref={ passwordInput } onChange={ handlePasswordChange }/>
           </Stack>
         </Row>
-        <Row>
+        <Row className="g-0">
           <Stack>
             <Button className="login-button" variant="primary" onClick={ handleSignIn }>Sign In</Button>
             <Button className="login-button" variant="secondary" onClick={ () => { createUserAlert(setShowAlert) }}>Sign Up</Button>
             <Button className="login-button" variant="secondary" onClick={ () => { props.setFormTypeHanlder(FormType.Bar) } }>Sign in to bar</Button>
           </Stack>
-        </Row>
+        </Row >
         <div className="page_alert">
           <AlertDismissable state={showAlert} handler={setShowAlert}/>
         </div>
@@ -204,7 +204,7 @@ const Login = (props) => {
 
   return (
     <div className="root" id="login-root">
-      <Row id="login-contents">
+      <Row className="g-0" id="login-contents">
         <LoginHeader />
         <PolyForm />
       </Row>

@@ -1,0 +1,47 @@
+
+#dashboard_nav {
+  font-size: x-large;
+  float: left;
+  padding: 20px 0;
+  padding-left: 20px;
+}
+
+#drink_info {
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+#drink_info_container {
+  position: absolute;
+  width: 75%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#ingredients_divider {
+  font-size: x-large;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  background: rgb(37, 37, 37);
+  filter: drop-shadow(0 0 0.75rem black);
+  z-index: 100;
+}
+
+.drink_ingredient {
+  position:relative;
+  width: 96%;
+  border-radius: 5px;
+  background: rgb(32, 32, 32);
+  border-radius: 10px;
+  border-color: rgb(66, 66, 66);
+  border-style: solid;
+  filter: drop-shadow(0 0 0.5rem black);
+  margin: 10px 0;
+  padding: 20px;
+  transform: translate(2%, 0);
+  overflow: hidden;
+}
