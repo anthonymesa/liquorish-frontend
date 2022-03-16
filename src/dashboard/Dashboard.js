@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 import { FiPlusCircle } from 'react-icons/fi';
 import { FiChevronLeft } from 'react-icons/fi';
-import { Row, Col, Button, Stack } from 'react-bootstrap';
+import { Row, Col, Button, Stack, Image } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
 const BarHead = (props) => {
@@ -25,6 +25,7 @@ const BarHead = (props) => {
         </div>
         <div id="bar_info">
           <div id="bar_info_container">
+            <Image src='https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=' width="150"/>
             <h1>{props.bar["bar_name"]}</h1>
             <p>{props.bar["address_street"]}, {props.bar["address_city"]}, {props.bar["address_state"]}, {props.bar["address_zip"]}</p>
           </div>
