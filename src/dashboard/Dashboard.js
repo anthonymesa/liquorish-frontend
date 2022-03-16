@@ -12,7 +12,7 @@ const BarHead = (props) => {
 
   const handleHome = () => {
     sessionStorage.removeItem('bar')
-    navigate("/home/user", { replace: true }); 
+    navigate("/home/user", { replace: true });
   }
 
   return (
@@ -47,38 +47,56 @@ const TabPay = () => {
   )
 }
 
-// const getTabDrinks = new Promise(async (resolve, reject) => {
-//   const client_id = sessionStorage.getItem('client_id');
+const getTabDrinks = (bar_id, user_id) => {
+  return new Promise(async (resolve, reject) => {
+    const client_id = sessionStorage.getItem('client_id');
 
-//   const url = 'http://liquorish-server.azurewebsites.net/user/' + client_id;
+    const url = 'http://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
 
-//   const response = await fetch(url);
-//   const jsonResponse = await response.json();
+    const response = await fetch(url)
+    const jsonResponse = await response.json();
 
-//   resolve(jsonResponse.value)
-// });
-
+    resolve(jsonResponse.value)
+  });
+}
 
 const TabList = (props) => {
 
-  // const [tab_drinks, setTabDrinks] = React.useState([])
+  const [bar_drinks_dom, setBarDrinksDom] = React.useState(null)
 
-  // getTabDrinks.then((_tab_drinks) => {
-  //   console.log(_tab_drinks)
-  //   setTabDrinks(_tab_drinks);
-  // });
+  const generateTabDrinksDom = async () => {
 
-  // const tab_drinks_dom = tab_drinks.map((drink_data) => {
-  //   <div>
-  //     <Row>
-  //       <h2>{drink_data["drink_name"]}</h2>
-  //     </Row>
-  //   </div>
-  // });
+    const test_promise = () => {
+      return new Promise((resolve, reject) => {
 
+        console.log(props.bar_id, props.user_id)
+
+        getTabDrinks(props.bar_id, props.user_id).then((tab_drinks) => {
+          resolve(tab_drinks)
+        })
+      })
+    }
+
+    const tab_drinks = await test_promise()
+    
+    const tab_drinks_dom = await tab_drinks.map((drink_data) =>
+      <div key={drink_data["drink_name"]} className="tab_drink">
+        <Row>
+          <h2>{drink_data["drink_name"]}</h2>
+        </Row>
+      </div>
+    );
+
+    setBarDrinksDom(tab_drinks_dom)
+  }
+
+  useEffect(async () => {
+    await generateTabDrinksDom()
+  }, [])
+  
   return (
     <Row className="g-0" id="tab_list">
-      {/* {tab_drinks_dom} */}
+      { bar_drinks_dom }
     </Row>
   )
 }
@@ -91,18 +109,6 @@ const AddItemToOrder = () => {
   )
 }
 
-const getTab = (client_id, bar_id) => {
-  return new Promise(async (resolve, reject) => {
-
-    const url = 'http://liquorish-server.azurewebsites.net/tab/' + client_id + '/' + bar_id;
-
-    const response = await fetch(url);
-    const jsonResponse = await response.json();
-
-    resolve(jsonResponse.value);
-  })
-}
-
 const Dashboard = () => {
 
   const [user_id, setUserId] = React.useState("");
@@ -113,6 +119,7 @@ const Dashboard = () => {
    * call only needs to be made once and can be saved to the session storage.
    */
   const [tab_id, setTabId] = React.useState("");
+  const [loaded, setIsLoaded] = React.useState(false);
 
   useEffect(() => {
     let client_id = JSON.parse(sessionStorage.getItem('client_id'));
@@ -120,14 +127,20 @@ const Dashboard = () => {
 
     let bar = JSON.parse(sessionStorage.getItem('bar'));
     setBar(bar);
-  }, []);
+
+    setIsLoaded(true)
+  }, [])
 
   return (
     <div className="root" id="dashboard_root">
       <Stack id="dashboard_contents">
         <BarHead bar={bar} />
         <TabPay tab_id={tab_id} user_id={user_id} />
-        <TabList bar_id={bar["id"]} user_id={user_id} />
+        
+        { loaded &&
+          <TabList bar_id={bar["id"]} user_id={user_id} /> 
+        }
+
       </Stack>
       <AddItemToOrder />
     </div>
