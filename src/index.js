@@ -11,6 +11,7 @@ import Home from './home/Home';
 import Dashboard from './dashboard/Dashboard'
 import ValidateAuth from './Auth';
 import OrderView from './order_view/OrderView';
+import NewOrder from './new_order/NewOrder';
 
 const App = (props) => {
   const { is_auth, setAuth } = ValidateAuth()
@@ -29,9 +30,11 @@ const App = (props) => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/home/user" />} />
         <Route path="/home/user" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/orderview" element={<OrderView />} />
+        <Route path="/dashboard/neworder" element={<NewOrder />} />
         <Route path="*" element={<Navigate to="/home/user"/>} />
       </Routes>
     </BrowserRouter>
