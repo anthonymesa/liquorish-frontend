@@ -104,9 +104,16 @@ const TabList = (props) => {
   )
 }
 
+
 const AddItemToOrder = () => {
+  const navigate = useNavigate();
+
+  const handleAddItemToOrder = () => {
+    navigate("./dashboard/neworder", { replace: true });
+  }
+  
   return (
-    <div id="add_item_to_order">
+    <div id="add_item_to_order" onClick={ handleAddItemToOrder }>
       <FiPlusCircle size={"4em"} />
     </div>
   )
