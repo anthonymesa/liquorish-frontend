@@ -30,11 +30,12 @@ const App = (props) => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/home/user" element={<Home />} />
+        <Route path="/" element={<Navigate to="/home/user" />} />
+        <Route path="/home/user" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/orderview" element={<OrderView />} /> */}
-        <Route path="/" element={<NewOrder />} />
-        {/* <Route path="*" element={<Navigate to="/home/user"/>} /> */}
+        <Route path="/dashboard/orderview" element={<OrderView />} />
+        <Route path="/dashboard/neworder" element={<NewOrder />} />
+        <Route path="*" element={<Navigate to="/home/user"/>} />
       </Routes>
     </BrowserRouter>
   )

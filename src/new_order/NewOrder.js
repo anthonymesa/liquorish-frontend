@@ -10,57 +10,58 @@ const Header = () => {
   const handleBack = () => {
     console.log("NewOrder::Header.handleBack - Clicked!");
 
-    // navigate('./dashboard', { replace: true });
+    navigate('/dashboard', { replace: true });
   }
 
   return (
     <div>
-      <div onClick={ handleBack }>
+      <div onClick={handleBack}>
         Back
       </div>
-      
+
       <h1>Ready to Order!</h1>
     </div>
   )
 }
 
-const NewOrderList = () => {
+const NewOrderList = (props) => {
 
-  const [bar_drinks, setBarDrinks] = React.useState([]);
+  const [bar_drinks_dom, setBarDrinksDom] = React.useState([]);
 
-  const getBarDrinks = () => {
-    return new Promise((resolve, reject) => {
+  const getBarDrinksDom = (_bar_id) => {
+    return new Promise(async (resolve, reject) => {
 
-      const sql_query = `
-      select 
-        drink_data.drink_id,
-        drink_data.drink_name,
-        drink_data.description,
-        bar_drinks.price
-        from bar_drinks inner join (
-          select * 
-          from drink 
-          where drink.drink_id in (
-            select bar_drinks.drink_id 
-            from bar_drinks 
-            where bar_id = 2
-          )
-        ) as drink_data
-        on bar_drinks.drink_id = drink_data.drink_id
-      `
+      const url = 'http://liquorish-server.azurewebsites.net/barDrinks/' + _bar_id;
 
+      const response = await fetch(url)
+      const jsonResponse = await response.json();
+
+      const handleBarDrinkSelection = () => {
+        console.log("NewOrder::NewOrderList.getBarDrinksDom.handleBarDrinkSelection - Clicked!");
+      }
+
+      const bar_drinks_dom_generator = await jsonResponse.value.map((drink_data) =>
+        <div key={JSON.stringify(drink_data)} className="bar_drink" onClick={handleBarDrinkSelection}>
+          <div>
+            <h2>{drink_data["drink_name"]}</h2>
+            <p>{drink_data["price"]}</p>
+          </div>
+        </div>
+      );
+
+      resolve(bar_drinks_dom_generator)
     });
   }
 
   useEffect(() => {
-    getBarDrinks().then((_bar_drinks) => {
-      setBarDrinks(_bar_drinks);
+    getBarDrinksDom(props.bar_id).then((_bar_drinks_dom) => {
+      setBarDrinksDom(_bar_drinks_dom);
     });
   }, []);
 
   return (
     <div>
-      NewOrderList
+      {bar_drinks_dom}
     </div>
   )
 }
@@ -77,8 +78,8 @@ const NewOrderAction = () => {
 
   return (
     <div>
-      <button onClick={ handleSavedDrinks }>Saved Drinks</button>
-      <button onClick={ handleMixYourOwn }>Mix Your Own!</button>
+      <button onClick={handleSavedDrinks}>Saved Drinks</button>
+      <button onClick={handleMixYourOwn}>Mix Your Own!</button>
     </div>
   )
 }
@@ -91,6 +92,7 @@ const NewOrder = () => {
 
   const [bar_data, setBarData] = React.useState(null);
   const [user_id, setUserId] = React.useState(null);
+  const [is_loaded, setIsLoaded] = React.useState(false);
 
   /**
    * This should handle rejection in the future if the JSON data is corrupt, etc.
@@ -114,18 +116,21 @@ const NewOrder = () => {
 
   useEffect(() => {
     getBarData().then((_bar_data) => {
-      setBarData(_bar_data);
+      getUserId().then((_user_id) => {      
+        console.log(bar_data)
+        setBarData(_bar_data);
+        setUserId(_user_id);
+        setIsLoaded(true);
+      })
     });
-
-    getUserId().then((_user_id) => {
-      setUserId(_user_id);
-    })
   }, []);
 
   return (
     <div>
       <Header />
-      <NewOrderList />
+      {is_loaded &&
+        <NewOrderList bar_id={bar_data["id"]} />
+      }
       <NewOrderAction />
     </div>
   );

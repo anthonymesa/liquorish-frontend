@@ -109,7 +109,7 @@ const AddItemToOrder = () => {
   const navigate = useNavigate();
 
   const handleAddItemToOrder = () => {
-    navigate("./dashboard/neworder", { replace: true });
+    navigate("/dashboard/neworder", { replace: true });
   }
   
   return (
