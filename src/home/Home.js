@@ -192,10 +192,14 @@ const Home = () => {
     })
   }, []);
 
-  return (page_ready &&
+  return (
     <div className="root" id="home-root">
-      <Header username={user_data["username"]} />
-      <BarList user_id={user_data["id"]} />
+      {page_ready &&
+        <div>
+          <Header username={user_data["username"]} />
+          <BarList user_id={user_data["id"]} />
+        </div>
+      }
     </div>
   )
 }

@@ -131,15 +131,31 @@ const Dashboard = () => {
   const [tab_id, setTabId] = React.useState("");
   const [loaded, setIsLoaded] = React.useState(false);
 
+  const getBarData = () => {
+    return new Promise((resolve, reject) => {
+      const session_bar_data = JSON.parse(sessionStorage.getItem('bar'));
+      console.log("Dashboard.getBarData() - Session bar data: " + JSON.stringify(session_bar_data));
+      resolve(session_bar_data);
+    })
+  }
+
+  const getUserId = () => {
+    return new Promise((resolve, reject) => {
+      const session_user_id = JSON.parse(sessionStorage.getItem('client_id'));
+      console.log("Dashboard.getUserId() - Session user id: " + session_user_id);
+      resolve(session_user_id);
+    });
+  }
+
   useEffect(() => {
-    let client_id = JSON.parse(sessionStorage.getItem('client_id'));
-    setUserId(client_id);
-
-    let bar = JSON.parse(sessionStorage.getItem('bar'));
-    setBar(bar);
-
-    setIsLoaded(true)
-  }, [])
+    getBarData().then((_bar_data) => {
+      getUserId().then((_user_id) => {      
+        setBar(_bar_data);
+        setUserId(_user_id);
+        setIsLoaded(true);
+      })
+    });
+  }, []);
 
   return (
     <div className="root">
