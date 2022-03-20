@@ -1,52 +1,50 @@
 
-import { useEffect, useState } from 'react';
+/**
+ * Gets the authorization indicator from the session storage. If it hasnt been
+ * set yet, then false is returned.
+ * 
+ * @returns 
+ */
+const getAuth = () => {
+  return new Promise((resolve, reject) => {
 
-export default function ValidateAuth() {
+    const auth_value = (sessionStorage.getItem('is_auth') == 'true');
 
-  /**
-   * This state defines whether the user has been authorised previously or not.
-   */
-  const [is_auth, setIsAuth] = useState(false);
+    setAuth(auth_value);
 
-  const getAuth = new Promise((resolve, reject) => {
-    const auth_string = sessionStorage.getItem('is_auth');
-    const auth_value = JSON.parse(auth_string);
-    resolve(auth_value === null ? false : auth_value);
-  });
-
-  useEffect(() => {
-    let mounted = true;
-
-    getAuth.then((auth_value) => {
-      if(mounted){
-        setIsAuth(auth_value);
-      }
-    });
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  /**
-   * This function is relatively unsafe right now in that any value can be applied,
-   * but it should only be used for applying 'true' or 'false' values.
-   * 
-   * @param {*} value 
-   * @returns 
-   */
-  const saveAuth = (value) => {
-    return new Promise((resolve, reject) => {
-      sessionStorage.setItem('is_auth', JSON.stringify(value));
-      setIsAuth(value);
-      resolve();
-    });
-  }
-
-  return {
-    setAuth: saveAuth,
-    is_auth
-  }
+    resolve(auth_value);
+  })
 }
 
+/**
+ * This function is relatively unsafe right now in that any value can be applied,
+ * but it should only be used for applying 'true' or 'false' values. Maybe this
+ * would be fixed with Typescript? Or we can just do a type guard maybe?
+ * 
+ * If there was an issue setting the value, then this call is rejected.
+ * 
+ * @param {boolean} value The boolean value indicating authorization status
+ * @returns Nothing
+ */
+const setAuth = (value) => {
+  return new Promise((resolve, reject) => {
 
+    /** 
+     * Set the is_auth value in session storage.
+     */
+    sessionStorage.setItem('is_auth', JSON.stringify(value));
+
+    /**
+     * If the value that was supposed to be set matches the value now retrieved
+     * from the session storage, then resovle in success, else, reject.
+     */
+    if (value === (sessionStorage.getItem('is_auth') == 'true')) {
+      console.log('auth set successfully');
+      resolve();
+    } else {
+      reject();
+    }
+  });
+}
+
+module.exports = { setAuth, getAuth }

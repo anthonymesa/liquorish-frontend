@@ -3,7 +3,7 @@ import './Login.css';
 import React from 'react';
 import logo from '../media/logo.svg';
 import { useNavigate } from "react-router-dom";
-import ValidateAuth from '../Auth';
+import { setAuth, getAuth } from '../Auth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Stack, Button, Alert, Image } from 'react-bootstrap';
 
@@ -58,7 +58,7 @@ const AlertDismissable = (props) => {
   )
 }
 
-const LoginFormUser = (props) => {
+const LoginFormUser = ({updateAuth, setFormTypeHanlder}) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = React.useState("");
@@ -67,8 +67,6 @@ const LoginFormUser = (props) => {
 
   const usernameInput = React.useRef(null);
   const passwordInput = React.useRef(null);
-
-  const { setAuth, is_auth } = ValidateAuth()
 
   const handleUsernameChange = () => {
     setUsername(usernameInput.current.value)
@@ -79,33 +77,31 @@ const LoginFormUser = (props) => {
   }
 
   const handleSignIn = () => {
+    validateLogin(username, password).then((_response) => {
 
-    return new Promise((resolve, reject) => {
-      validateLogin(username, password).then((_response) => {
+      console.log("validating login...");
 
-        /**
-         * If the response status is not 0 'success' or the client id is negative,
-         * then there was an error and the invalid login alert should be displayed.
-         * 
-         * It is technically possible that response.value COULD be null here, but that
-         * would need to be fixed in the backend. We should expect that a response status
-         * of 0 means that the value is non-null.
-         */
-        if(_response && (_response["client id"] < 0))
-        {
-          invalidLoginAlert();
-          reject();
-        }
-    
+      /**
+       * If the response status is not 0 'success' or the client id is negative,
+       * then there was an error and the invalid login alert should be displayed.
+       * 
+       * It is technically possible that response.value COULD be null here, but that
+       * would need to be fixed in the backend. We should expect that a response status
+       * of 0 means that the value is non-null.
+       */
+      if(_response && (_response["client id"] < 0))
+      {
+        invalidLoginAlert();
+        return;
+      }
+  
+      updateAuth(true).then(() => {
+        console.log("setting client_id")
         sessionStorage.setItem('client_id', _response["client id"]);
-
-        setAuth(true).then(() => {
-          navigate("/home/user", { replace: true });
-        });
-        
-        resolve();
-      })
-    });
+        console.log("navigating to home/user")
+        navigate("/home/user");
+      });
+    })
   }
 
   return (
@@ -123,7 +119,7 @@ const LoginFormUser = (props) => {
           <Stack>
             <Button className="login-button" variant="primary" onClick={ handleSignIn }>Sign In</Button>
             <Button className="login-button" variant="secondary" onClick={ () => { createUserAlert(setShowAlert) }}>Sign Up</Button>
-            <Button className="login-button" variant="secondary" onClick={ () => { props.setFormTypeHanlder(FormType.Bar) } }>Sign in to bar</Button>
+            <Button className="login-button" variant="secondary" onClick={ () => { setFormTypeHanlder(FormType.Bar) } }>Sign in to bar</Button>
           </Stack>
         </Row >
         <div className="page_alert">
@@ -180,7 +176,7 @@ const LoginFormBar = (props) => {
   );
 }
 
-const PolyForm = (props) => {
+const PolyForm = ({updateAuth}) => {
   const [form_type, setFormType] = React.useState(null);
 
   if(form_type == null){
@@ -191,6 +187,7 @@ const PolyForm = (props) => {
   {
     case FormType.User:
       return <LoginFormUser 
+      updateAuth={ updateAuth }
         setFormTypeHanlder={ setFormType }
       />
     case FormType.Bar:
@@ -200,13 +197,13 @@ const PolyForm = (props) => {
   }
 }
 
-const Login = (props) => {
+const Login = ({updateAuth}) => {
 
   return (
     <div className="root" id="login-root">
       <Row className="g-0" id="login-contents">
         <LoginHeader />
-        <PolyForm />
+        <PolyForm updateAuth={updateAuth}/>
       </Row>
     </div>
   );
