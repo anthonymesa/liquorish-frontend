@@ -1,0 +1,26 @@
+.headerv2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  background-color: grey;
+  width: 100%;
+  height: 4em;
+  color: white;
+}
+
+.headerv2-nav {
+  position: absolute;
+  background: blue;
+  height: 100%;
+  width: 8em;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.headerv2-title {
+  text-align: center;
+}

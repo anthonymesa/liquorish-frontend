@@ -12,6 +12,7 @@ import Dashboard from './dashboard/Dashboard'
 import { setAuth, getAuth } from './Auth';
 import OrderView from './order_view/OrderView';
 import NewOrder from './new_order/NewOrder';
+import AddRto from './add_rto/AddRto';
 
 const App = (props) => {
 
@@ -116,6 +117,7 @@ const App = (props) => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/orderview" element={<OrderView />} />
           <Route path="/dashboard/neworder" element={<NewOrder />} />
+          <Route path="/dashboard/neworder/addrto" element={<AddRto />} />
           <Route path="*" element={<Navigate to="/home/user"/>} />
         </Routes>
       </BrowserRouter>
