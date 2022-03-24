@@ -57,7 +57,10 @@ const AddRto = () => {
             nav_name={"New Order"}
             nav_link={"/dashboard/neworder"}
             title={"Drinks Ready To Order!"}
-            elements={[<DrinkPrice drink_price={drink_data["price"]}/>]}
+            elements={[
+              <DrinkPrice drink_price={drink_data["price"]}/>,
+              <DrinkPrice drink_price={drink_data["price"]}/>
+            ]}
             unstore={['drink_data']}
           />
           <DrinkView drink_data={drink_data}/>
