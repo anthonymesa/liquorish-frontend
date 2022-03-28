@@ -13,6 +13,7 @@ import { setAuth, getAuth } from './Auth';
 import OrderView from './order_view/OrderView';
 import NewOrder from './new_order/NewOrder';
 import AddRto from './add_rto/AddRto';
+import SavedDrinks from './SavedDrinks/SavedDrinks';
 
 const App = (props) => {
 
@@ -104,6 +105,7 @@ const App = (props) => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login updateAuth={updateAuth} />} />
+          <Route path="/SavedDrinks" element={<SavedDrinks />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
