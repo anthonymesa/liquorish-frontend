@@ -1,16 +1,30 @@
+/**
+ *  SavedDrinks.js
+ *  Author: Anthony Mesa
+ * 
+ *  This module displays a list of the user's saved drinks.
+ * 
+ *  This module expects three properties, the client_id of the saved drinks to be 
+ *  displayed, the dom_injecting_callback function to be run on each listing, and 
+ *  the on_drink_click callback function to be run when a user clicks any of the
+ *  listings. 
+ * 
+ *  Both callbacks take the argument _drink_data to make the element's drink data
+ *  available to the caller of the Saved Drinks module.
+ */
 
 import './SavedDrinks.css'
 import React, { useEffect } from 'react'
 
-const SavedDrinks = () => {
+const SavedDrinks2 = ({ client_id, dom_injecting_callback, on_drink_click }) => {
 
   const [saved_drinks_dom, setSavedDrinksDom] = React.useState(null)
   const [is_loaded, setIsLoaded] = React.useState(false)
 
-  const getSavedDrinks = (_client_id) => {
+  const getSavedDrinks = (client_id) => {
     return new Promise(async (resolve, reject) => {
 
-      const url = 'http://liquorish-server.azurewebsites.net/savedDrinks/' + _client_id
+      const url = 'http://liquorish-server.azurewebsites.net/savedDrinks/' + client_id
 
       const response = await fetch(url);
       const jsonResponse = await response.json();
@@ -23,19 +37,23 @@ const SavedDrinks = () => {
     return new Promise(async (resolve, reject) => {
 
       const handleSavedDrinkSelection = (_drink_data) => {
-        console.log("SavedDrinks::handleSavedDrinkSelection - clicked!")
+        if(on_drink_click != undefined)
+        {
+          on_drink_click(_drink_data)
+        }
       }
 
       const saved_drinks_generator = await _saved_drinks.map((drink_data) =>
-        <div key={JSON.stringify(drink_data)} className="savedDrink" onClick={() => { handleSavedDrinkSelection(drink_data); }}>
+        <div key={JSON.stringify(drink_data)} className="savedDrink" onClick={() => { handleSavedDrinkSelection(drink_data) }}>
           <div>
             <div className="savedDrinkName">
               <h2>
-                {drink_data["drink_name"]}
+                { drink_data["drink_name"] }
               </h2>
             </div>
             <div className="savedDrinkPrice">
-
+              {(dom_injecting_callback != undefined) &&
+              dom_injecting_callback(drink_data)}
             </div>
           </div>
         </div>
@@ -46,9 +64,6 @@ const SavedDrinks = () => {
   }
 
   useEffect(() => {
-
-    const client_id = sessionStorage.getItem('client_id')
-
     getSavedDrinks(client_id).then((_saved_drinks) => {
       generateSavedDrinksListDom(_saved_drinks).then((_saved_drinks_dom) => {
         setSavedDrinksDom(_saved_drinks_dom)
@@ -63,6 +78,32 @@ const SavedDrinks = () => {
       saved_drinks_dom }
     </div>
   );
+}
+
+/**
+ * This is not meant to be a part of the final product, this is for testing only.
+ * This is how the SavedDrinks module would actually be used on a page.
+ */
+
+const SavedDrinks = () => {
+
+  const generatePrice = (_drink_data) => {
+    return (
+      <div>
+        { JSON.stringify(_drink_data) }
+      </div>
+    )
+  }
+
+  const doClickAction = (_drink_data) => {
+    console.log("clicked " + _drink_data.drink_name + "!")
+  }
+
+  return(
+    <div>
+      <SavedDrinks2 client_id={2} dom_injecting_callback={ generatePrice } on_drink_click={ doClickAction }/>
+    </div>
+  )
 }
 
 export default SavedDrinks
