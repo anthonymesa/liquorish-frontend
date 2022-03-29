@@ -50,7 +50,7 @@ const getTabDrinks = (bar_id, user_id) => {
   return new Promise(async (resolve, reject) => {
     const client_id = sessionStorage.getItem('client_id');
 
-    const url = 'http://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
+    const url = 'https://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
 
     const response = await fetch(url)
     const jsonResponse = await response.json();
