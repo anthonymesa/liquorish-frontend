@@ -35,9 +35,7 @@ const SavedDrinks = () => {
               </h2>
             </div>
             <div className="savedDrinkPrice">
-              <p>
 
-              </p>
             </div>
           </div>
         </div>
