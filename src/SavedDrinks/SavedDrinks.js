@@ -20,8 +20,30 @@ const SavedDrinks = () => {
   }
 
   const generateSavedDrinksListDom = (_saved_drinks) => {
-    return new Promise((resolve, reject) => {
-      resolve(JSON.stringify(_saved_drinks))
+    return new Promise(async (resolve, reject) => {
+
+      const handleSavedDrinkSelection = (_drink_data) => {
+        console.log("SavedDrinks::handleSavedDrinkSelection - clicked!")
+      }
+
+      const saved_drinks_generator = await _saved_drinks.map((drink_data) =>
+        <div key={JSON.stringify(drink_data)} className="savedDrink" onClick={() => { handleSavedDrinkSelection(drink_data); }}>
+          <div>
+            <div className="savedDrinkName">
+              <h2>
+                {drink_data["drink_name"]}
+              </h2>
+            </div>
+            <div className="savedDrinkPrice">
+              <p>
+
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+
+      resolve(saved_drinks_generator)
     });
   }
 
@@ -38,7 +60,7 @@ const SavedDrinks = () => {
   }, [])
 
   return (
-    <div>
+    <div className="savedDrinks">
       {is_loaded &&
       saved_drinks_dom }
     </div>
