@@ -39,7 +39,7 @@ const BarList = (props) => {
 
       const client_id = sessionStorage.getItem('client_id');
 
-      const url = 'http://liquorish-server.azurewebsites.net/bars/' + client_id;
+      const url = 'https://liquorish-server.azurewebsites.net/bars/' + client_id;
 
       const response = await fetch(url);
       const jsonResponse = await response.json();
@@ -147,7 +147,7 @@ const Home = () => {
 
       if (client_id > 0) {
 
-        const url = 'http://liquorish-server.azurewebsites.net/user/' + client_id;
+        const url = 'https://liquorish-server.azurewebsites.net/user/' + client_id;
 
         console.log("Home::getUserData() - API call url: " + url);
 

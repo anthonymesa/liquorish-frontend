@@ -34,7 +34,7 @@ const NewOrderList = (props) => {
   const getBarDrinksDom = (_bar_id) => {
     return new Promise(async (resolve, reject) => {
 
-      const url = 'http://liquorish-server.azurewebsites.net/barDrinks/' + _bar_id;
+      const url = 'https://liquorish-server.azurewebsites.net/barDrinks/' + _bar_id;
 
       const response = await fetch(url)
       const jsonResponse = await response.json();

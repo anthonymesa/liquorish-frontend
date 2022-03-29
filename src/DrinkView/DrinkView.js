@@ -19,7 +19,7 @@ const DrinkInfo = (props) => {
 
 const getDrinkIngredientsDom = (drink_id) => {
   return new Promise(async (resolve, reject) => {
-    const url = 'http://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
+    const url = 'https://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
 
     console.log(url)
 

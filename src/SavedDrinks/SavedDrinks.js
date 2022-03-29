@@ -25,7 +25,7 @@ const SavedDrinks = ({ client_id, dom_injecting_callback, on_drink_click }) => {
   const getSavedDrinks = (client_id) => {
     return new Promise(async (resolve, reject) => {
 
-      const url = 'http://liquorish-server.azurewebsites.net/savedDrinks/' + client_id
+      const url = 'https://liquorish-server.azurewebsites.net/savedDrinks/' + client_id
 
       const response = await fetch(url);
       const jsonResponse = await response.json();

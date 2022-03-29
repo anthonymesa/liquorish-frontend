@@ -9,7 +9,6 @@ import './App.css';
 import Login from './login/Login';
 import Home from './home/Home';
 import Dashboard from './dashboard/Dashboard'
-import { setAuth, getAuth } from './Auth';
 import OrderView from './order_view/OrderView';
 import NewOrder from './new_order/NewOrder';
 import AddRto from './add_rto/AddRto';

@@ -37,7 +37,7 @@ const invalidLoginAlert = () => {
 
 const validateLogin = (username, password) => {
   return new Promise(async (resolve, reject) => {
-    const url = 'http://liquorish-server.azurewebsites.net/loginUser/' + username + '/' + password;
+    const url = 'https://liquorish-server.azurewebsites.net/loginUser/' + username + '/' + password;
 
     const response = await fetch(url);
     const jsonResponse = await response.json();
