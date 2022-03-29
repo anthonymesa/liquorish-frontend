@@ -11,12 +11,13 @@
  * 
  *  Both callbacks take the argument _drink_data to make the element's drink data
  *  available to the caller of the Saved Drinks module.
+ * 
  */
 
 import './SavedDrinks.css'
 import React, { useEffect } from 'react'
 
-const SavedDrinks2 = ({ client_id, dom_injecting_callback, on_drink_click }) => {
+const SavedDrinks = ({ client_id, dom_injecting_callback, on_drink_click }) => {
 
   const [saved_drinks_dom, setSavedDrinksDom] = React.useState(null)
   const [is_loaded, setIsLoaded] = React.useState(false)
@@ -78,32 +79,6 @@ const SavedDrinks2 = ({ client_id, dom_injecting_callback, on_drink_click }) => 
       saved_drinks_dom }
     </div>
   );
-}
-
-/**
- * This is not meant to be a part of the final product, this is for testing only.
- * This is how the SavedDrinks module would actually be used on a page.
- */
-
-const SavedDrinks = () => {
-
-  const generatePrice = (_drink_data) => {
-    return (
-      <div>
-        { JSON.stringify(_drink_data) }
-      </div>
-    )
-  }
-
-  const doClickAction = (_drink_data) => {
-    console.log("clicked " + _drink_data.drink_name + "!")
-  }
-
-  return(
-    <div>
-      <SavedDrinks2 client_id={2} dom_injecting_callback={ generatePrice } on_drink_click={ doClickAction }/>
-    </div>
-  )
 }
 
 export default SavedDrinks
