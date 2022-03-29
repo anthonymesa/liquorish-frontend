@@ -8,14 +8,20 @@ const SavedDrinks = () => {
   const [is_loaded, setIsLoaded] = React.useState(false)
 
   const getSavedDrinks = (_client_id) => {
-    return new Promise((resolve, reject) => {
-      resolve(_client_id)
+    return new Promise(async (resolve, reject) => {
+
+      const url = 'http://liquorish-server.azurewebsites.net/savedDrinks/' + _client_id
+
+      const response = await fetch(url);
+      const jsonResponse = await response.json();
+  
+      resolve(jsonResponse.value)
     });
   }
 
   const generateSavedDrinksListDom = (_saved_drinks) => {
     return new Promise((resolve, reject) => {
-      resolve(_saved_drinks)
+      resolve(JSON.stringify(_saved_drinks))
     });
   }
 
@@ -33,7 +39,6 @@ const SavedDrinks = () => {
 
   return (
     <div>
-      SavedDrinks
       {is_loaded &&
       saved_drinks_dom }
     </div>
