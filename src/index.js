@@ -9,7 +9,6 @@ import './App.css';
 import Login from './login/Login';
 import Home from './home/Home';
 import Dashboard from './dashboard/Dashboard'
-import { setAuth, getAuth } from './Auth';
 import OrderView from './order_view/OrderView';
 import NewOrder from './new_order/NewOrder';
 import AddRto from './add_rto/AddRto';
@@ -26,10 +25,16 @@ const App = (props) => {
     return new Promise((resolve, reject) => {
 
       /**
-       * The value saved in storage is a string. Convert to a boolean by checking
-       * if the string equals true. false for all else (including null, etc.)
+       * This value, if in the storage should be 0-3, but it is possible that it
+       * is null.
        */
-      const auth_value = (sessionStorage.getItem('is_auth') == 'true');
+      const volatile_auth_value = sessionStorage.getItem('is_auth')
+
+      /**
+       * This ensures that if the value is null or outside the 0-3 range, it
+       * is converted to 0.
+       */
+      const auth_value = ((volatile_auth_value >= 0) && (volatile_auth_value <= 3)) ? volatile_auth_value : 0
 
       /**
        * Set the value right after casting the result of reading. This makes it so
