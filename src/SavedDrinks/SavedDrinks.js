@@ -7,19 +7,11 @@ const SavedDrinks = () => {
   const [saved_drinks_dom, setSavedDrinksDom] = React.useState(null)
   const [is_loaded, setIsLoaded] = React.useState(false)
 
-  const loadClientId = () => {
-    return new Promise((resolve, reject) => {
-      resolve(sessionStorage.getItem('client_id'))
-    });
-  }
-
-
   const getSavedDrinks = (_client_id) => {
     return new Promise((resolve, reject) => {
       resolve(_client_id)
     });
   }
-
 
   const generateSavedDrinksListDom = (_saved_drinks) => {
     return new Promise((resolve, reject) => {
