@@ -9,31 +9,32 @@ const SavedDrinks = () => {
 
   const loadClientId = () => {
     return new Promise((resolve, reject) => {
-      resolve()
+      resolve(sessionStorage.getItem('client_id'))
     });
   }
 
 
-  const getSavedDrinks = () => {
+  const getSavedDrinks = (_client_id) => {
     return new Promise((resolve, reject) => {
-      resolve()
+      resolve(_client_id)
     });
   }
 
 
-  const generateSavedDrinksListDom = () => {
+  const generateSavedDrinksListDom = (_saved_drinks) => {
     return new Promise((resolve, reject) => {
-      resolve()
+      resolve(_saved_drinks)
     });
   }
 
   useEffect(() => {
-    loadClientId().then((client_id) => {
-      getSavedDrinks(client_id).then((_saved_drinks) => {
-        generateSavedDrinksListDom(_saved_drinks).then((_saved_drinks_dom) => {
-          setSavedDrinksDom(_saved_drinks_dom)
-          setIsLoaded(true)
-        })
+
+    const client_id = sessionStorage.getItem('client_id')
+
+    getSavedDrinks(client_id).then((_saved_drinks) => {
+      generateSavedDrinksListDom(_saved_drinks).then((_saved_drinks_dom) => {
+        setSavedDrinksDom(_saved_drinks_dom)
+        setIsLoaded(true)
       })
     })
   }, [])
