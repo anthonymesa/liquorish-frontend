@@ -3,17 +3,46 @@ import './Login.css';
 import React from 'react';
 import logo from '../media/logo.svg';
 import { useNavigate } from "react-router-dom";
-import { setAuth, getAuth } from '../Auth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Stack, Button, Alert, Image } from 'react-bootstrap';
 
-//  Closest I can get to a javascript enum
-const FormType = {
-  User: Symbol("user"),
-  Bar: Symbol("bar")
+//==============================================================================
+//  Module - Login
+//==============================================================================
+
+/**
+ * Main login module.
+ * 
+ * props:
+ * 
+ *    updateAuth - This is a callback that is provided by the index page. Use this
+ *      callback to update the current authorization state for the user or bar.
+ *      See index.js for more.
+ */
+ export default function Login({updateAuth}){
+
+  return (
+    <div className="root" id="login-root">
+      <Row className="g-0" id="login-contents">
+        
+        <LoginHeader />
+
+        {/* Passing the callback property to the polyform */}
+        <PolyForm updateAuth={updateAuth}/>
+      
+      </Row>
+    </div>
+  );
 }
 
-const LoginHeader = () => {
+//==============================================================================
+//  Module - LoginHeader
+//==============================================================================
+
+/**
+ * Static header for the login screen.
+ */
+function LoginHeader(){
   return (
     <Stack id="login-header">
       <Image id="login-logo" src={ logo }  width="200px" height="200px" alt="logo"/>
@@ -24,41 +53,57 @@ const LoginHeader = () => {
   );
 }
 
-const createUserAlert = (setShowAlert) => {
-  setShowAlert(true);
-  setTimeout(() => {
-    setShowAlert(false);
-  }, 10000);
+//==============================================================================
+//  Module - PolyForm
+//==============================================================================
+
+/**
+ * Very poorly done 'enum' for js, but it works. It is at the global level
+ * so that it can be called by other modules.
+ */
+ const FormType = {
+  User: Symbol("user"),
+  Bar: Symbol("bar")
 }
 
-const invalidLoginAlert = () => {
-  alert("Username or password is incorrect.");
+/**
+ * This poly form displays one of two modules at any given time,
+ * LoginFormUser, and LoginFormBar, depending on what form_type is set in the 
+ * module's state.
+ *
+ * props:
+ * 
+ *    updateAuth - This is a callback that is provided by the index page. Use this
+ *      callback to update the current authorization state for the user or bar.
+ * 
+ * states: 
+ *    
+ *    form_type - The type of form module display: Bar or User.
+ */
+function PolyForm({updateAuth}){
+
+  const [form_type, setFormType] = React.useState(null);
+
+  // If the form type is null, it is User by default.
+  if(form_type == null){
+    setFormType(FormType.User);
+  }
+
+  // Return either model given the supplied type case.
+  switch(form_type)
+  {
+    case FormType.User:
+      return <LoginFormUser updateAuth={ updateAuth } setFormTypeHanlder={ setFormType }/>
+    case FormType.Bar:
+      return <LoginFormBar updateAuth={ updateAuth } setFormTypeHanlder={ setFormType }/>
+  }
 }
 
-const validateLogin = (username, password) => {
-  return new Promise(async (resolve, reject) => {
-    const url = 'https://liquorish-server.azurewebsites.net/loginUser/' + username + '/' + password;
+//==============================================================================
+//  Module - LoginFormUser
+//==============================================================================
 
-    const response = await fetch(url);
-    const jsonResponse = await response.json();
-  
-    console.log("validate: " + JSON.stringify(jsonResponse.value))
-
-    resolve(jsonResponse.value)
-  });
-}
-
-const AlertDismissable = (props) => {
-  return (
-    <Alert show={props.state} variant="primary" onClose={() => props.handler(false)} dismissible>
-      <p>
-        New users must sign up at a location providing Liquorish services.
-      </p>
-    </Alert>
-  )
-}
-
-const LoginFormUser = ({updateAuth, setFormTypeHanlder}) => {
+function LoginFormUser({updateAuth, setFormTypeHanlder}){
   const navigate = useNavigate();
 
   const [username, setUsername] = React.useState("");
@@ -95,7 +140,7 @@ const LoginFormUser = ({updateAuth, setFormTypeHanlder}) => {
         return;
       }
   
-      updateAuth(true).then(() => {
+      updateAuth('1').then(() => {
         console.log("setting client_id")
         sessionStorage.setItem('client_id', _response["client id"]);
         console.log("navigating to home/user")
@@ -129,7 +174,11 @@ const LoginFormUser = ({updateAuth, setFormTypeHanlder}) => {
   );
 }
 
-const LoginFormBar = (props) => {
+//==============================================================================
+//  Module - LoginFormBar
+//==============================================================================
+
+function LoginFormBar(props){
 
   const [bar_username, setBarUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -176,37 +225,65 @@ const LoginFormBar = (props) => {
   );
 }
 
-const PolyForm = ({updateAuth}) => {
-  const [form_type, setFormType] = React.useState(null);
+//==============================================================================
+//  Module - AlertDismissable
+//==============================================================================
 
-  if(form_type == null){
-    setFormType(FormType.User);
-  }
-
-  switch(form_type)
-  {
-    case FormType.User:
-      return <LoginFormUser 
-      updateAuth={ updateAuth }
-        setFormTypeHanlder={ setFormType }
-      />
-    case FormType.Bar:
-      return <LoginFormBar 
-        setFormTypeHanlder={ setFormType }
-      />
-  }
-}
-
-const Login = ({updateAuth}) => {
-
+function AlertDismissable(props){
   return (
-    <div className="root" id="login-root">
-      <Row className="g-0" id="login-contents">
-        <LoginHeader />
-        <PolyForm updateAuth={updateAuth}/>
-      </Row>
-    </div>
-  );
+    <Alert show={props.state} variant="primary" onClose={() => props.handler(false)} dismissible>
+      <p>
+        New users must sign up at a location providing Liquorish services.
+      </p>
+    </Alert>
+  )
 }
 
-export default Login;
+//==============================================================================
+//  Functions
+//==============================================================================
+
+/**
+ * Manipulates displaying the AlertDismissable module by setting the show_alert
+ * state to true, causing the page to reload and be re-rendered as visible.
+ * 
+ * Alert is visible for 10 seconds.
+ */
+function createUserAlert(setShowAlert){
+  setShowAlert(true);
+  setTimeout(() => {
+    setShowAlert(false);
+  }, 10000);
+}
+
+/**
+ * Displays an alert to the screen.
+ */
+function invalidLoginAlert(){
+  alert("Username or password is incorrect.");
+}
+
+/**
+ * Makes an API call to the backend to login in the user or bar.
+ */
+function validateLogin(username, password){
+  return new Promise(async (resolve, reject) => {
+    const url = 'https://liquorish-server.azurewebsites.net/loginUser/' + username + '/' + password;
+
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
+  
+    console.log("validate: " + JSON.stringify(jsonResponse.value))
+
+    resolve(jsonResponse.value)
+  });
+}
+
+
+
+
+
+
+
+
+
