@@ -25,42 +25,25 @@ const App = (props) => {
     return new Promise((resolve, reject) => {
 
       /**
-       * The value saved in storage is a string. Convert to a boolean by checking
-       * if the string equals true. false for all else (including null, etc.)
+       * This value, if in the storage should be 0-3, but it is possible that it
+       * is null.
        */
-      const auth_value = (sessionStorage.getItem('is_auth') == 'true');
+      const volatile_auth_value = sessionStorage.getItem('is_auth')
 
       /**
-       * Set the value right after casting the result of reading. This makes it so
-       * that if is_auth was null or undefined, it is now set as false.
+       * This ensures that if the value is null or outside the 0-3 range, it
+       * is converted to 0.
        */
-      setLocalAuth(auth_value).then(() => {
-        resolve(auth_value);
-      });
+      const auth_value = ((volatile_auth_value >= 0) && (volatile_auth_value <= 3)) ? volatile_auth_value : 0
+
+      sessionStorage.setItem('is_auth', auth_value);
+
+      resolve(auth_value);
+
     });
   }
 
   /**
-   * If there was an issue setting the value, then this call is rejected.
-   * 
-   * @param {boolean} value The boolean value indicating authorization status
-   * @returns Nothing
-   */
-  const setLocalAuth = (value) => {
-    return new Promise((resolve, reject) => {
-
-      const cast_value = (value == 'true') || (value == true);
-
-      /** 
-       * Set the is_auth value in session storage.
-       */
-      sessionStorage.setItem('is_auth', cast_value);
-
-      resolve();
-    });
-  }
-
-    /**
    * This handle will be passed to pages that need to be able to update the auth
    * state in this main application module which is mounting the other modules.
    * 
@@ -76,10 +59,9 @@ const App = (props) => {
    */
   const updateAuth = (_auth_value) => {
     return new Promise((resolve, reject) => {
-      setLocalAuth(_auth_value).then(() => {
-        setIsAuth(_auth_value);
-        resolve();
-      });
+      sessionStorage.setItem('is_auth', _auth_value);
+      setIsAuth(_auth_value);
+      resolve();
     });
   }
 
@@ -98,16 +80,7 @@ const App = (props) => {
     });
   }, []);
 
-  if (!is_auth) {
-    return (page_ready &&
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login updateAuth={updateAuth} />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </BrowserRouter>
-    )
-  } else {
+  if (is_auth == '1'){
     return (page_ready &&
       <BrowserRouter>
         <Routes>
@@ -117,7 +90,26 @@ const App = (props) => {
           <Route path="/dashboard/orderview" element={<OrderView />} />
           <Route path="/dashboard/neworder" element={<NewOrder />} />
           <Route path="/dashboard/neworder/addrto" element={<AddRto />} />
-          <Route path="*" element={<Navigate to="/home/user"/>} />
+          <Route path="*" element={<Navigate to="/home/user" />} />
+        </Routes>
+      </BrowserRouter>
+    )
+  } else if (is_auth == '2'){
+    return (page_ready &&
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/" element={<Navigate to="/home/user" />} />
+          <Route path="/home/bar" element={<BarHome />} />
+          <Route path="*" element={<Navigate to="/home/user" />} /> */}
+        </Routes>
+      </BrowserRouter>
+    )
+  } else {
+    return (page_ready &&
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login updateAuth={updateAuth} />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     )
