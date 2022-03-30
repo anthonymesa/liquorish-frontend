@@ -121,6 +121,14 @@ function LoginFormUser({ updateAuth, setFormTypeHanlder }) {
     setPassword(passwordInput.current.value)
   }
 
+  /**
+   * Makes an API call to the backend to login in the user
+   */
+  function validateUserLogin(username, password) {
+    const url = 'https://liquorish-server.azurewebsites.net/loginUser/' + username + '/' + password;
+    return makeGetRequest(url)
+  }
+
   const handleSignIn = () => {
     validateUserLogin(username, password).then((_response) => {
 
@@ -197,6 +205,14 @@ function LoginFormBar({ updateAuth, setFormTypeHanlder }) {
 
   const handleCreateBar = () => {
     navigate("/CreateBar");
+  }
+
+  /**
+   * Returns a Promise via the call to makeGetRequest.
+   */
+  function validateBarLogin(username, password) {
+    const url = 'https://liquorish-server.azurewebsites.net/loginBar/' + username + '/' + password
+    return makeGetRequest(url)
   }
 
   const handleSignIn = () => {
@@ -284,22 +300,6 @@ function createUserAlert(setShowAlert) {
  */
 function invalidLoginAlert() {
   alert("Username or password is incorrect.");
-}
-
-/**
- * Makes an API call to the backend to login in the user
- */
-function validateUserLogin(username, password) {
-  const url = 'https://liquorish-server.azurewebsites.net/loginUser/' + username + '/' + password;
-  return makeGetRequest(url)
-}
-
-/**
- * Makes an API call to the backend to login in the user
- */
-function validateBarLogin(username, password) {
-  const url = 'https://liquorish-server.azurewebsites.net/loginBar/' + username + '/' + password
-  return makeGetRequest(url)
 }
 
 function makeGetRequest(url) {

@@ -36,9 +36,6 @@ const HeaderV2 = ({ does_nav = false, nav_name, nav_link, title, elements = [], 
   }
 
   useEffect(async () => {
-
-    console.log("HeaderV2.useEffect([]) - Rendering header!")
-
     const bootstrapped_element_cols = await elements.map((element) =>
       <Col className="headerv2-elements-col">
         {element}
