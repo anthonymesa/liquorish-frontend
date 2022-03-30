@@ -118,9 +118,7 @@ const SettingsFormUser = ({ user, updateAuth }) => {
     Setinputnewpassword(newPasswordInput.current.value)
   }
 
-  const handleConfirmNewPasswordChange = () => {
-    Setinputconfirmnewpassword(confirmNewPasswordInput.current.value)
-  }
+    const savedDrinks = ["GlenLevit Whisky", "Captain Morgan Rum", "Greygoose Vodka"];
 
   function handleCityState() {
     const post_args = {
