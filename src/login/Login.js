@@ -134,7 +134,7 @@ function LoginFormUser({ updateAuth, setFormTypeHanlder }) {
        * would need to be fixed in the backend. We should expect that a response status
        * of 0 means that the value is non-null.
        */
-      if (_response && (_response["client id"] < 0)) {
+      if (!_response || (_response["client id"] < 0)) {
         invalidLoginAlert();
         return;
       }
@@ -212,7 +212,7 @@ function LoginFormBar({ updateAuth, setFormTypeHanlder }) {
        * would need to be fixed in the backend. We should expect that a response status
        * of 0 means that the value is non-null.
        */
-      if (_response && (_response["client id"] < 0)) {
+      if (!_response || (_response["client id"] < 0)) {
         invalidLoginAlert();
         return;
       }

@@ -65,7 +65,7 @@ const App = (props) => {
     });
   }
 
-  const [is_auth, setIsAuth] = React.useState(false);
+  const [is_auth, setIsAuth] = React.useState(0);
   const [page_ready, setPageReady] = React.useState(false);
 
   /**
