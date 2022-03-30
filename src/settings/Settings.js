@@ -1,44 +1,113 @@
 
-import './settings/Settings.css';
-import React from 'react';
+import './Settings.css';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate } from "react-router-dom";
+import HeaderV2 from '../headerv2/HeaderV2';
+import SavedDrinks from '../SavedDrinks/SavedDrinks';
+import { Button, Row, Stack, Col } from 'react-bootstrap';
 
-const FormType = {
-  User: Symbol("user"),
-  Drinks: Symbol("drinks")
-}
+//==============================================================================
+//  Module - Settings
+//==============================================================================
 
-const SettingsHeader = () => {
+export default function Settings({ updateAuth }) {
+
+  const navigate = useNavigate()
+
+  const [user_data, setUserData] = React.useState({})
+  const [is_loaded, setIsLoaded] = React.useState(false)
+
+  /**
+   * Gets the users data via API call. specifically, this checks to see if the 
+   * client id is set in storage first. if it isn't then the promise is rejected,
+   * and the user should be logged out, as client_id is only set on login.
+   */
+  const getUserData = () => {
+    return new Promise(async (resolve, reject) => {
+
+      const client_id = JSON.parse(sessionStorage.getItem('client_id'));
+
+      if (client_id > 0) {
+        const url = 'https://liquorish-server.azurewebsites.net/user/' + client_id;
+        const response = await fetch(url);
+        const jsonResponse = await response.json();
+        resolve(jsonResponse.value);
+      } else {
+        reject();
+      }
+    });
+  };
+
+  /**
+   * useEffect runs the provided callback once on page load
+   */
+  useEffect(() => {
+    getUserData().then((_user_data) => {
+
+      // This function runs on 'resolve'
+
+      setUserData(_user_data);
+      setIsLoaded(true);
+    }, () => {
+
+      // This funciton runs on 'reject', removing user auth and redirecting them
+      // to the login.
+
+      sessionStorage.removeItem('is_auth');
+      navigate("/", { replace: true });
+    })
+  }, []);
+
   return (
-    <div id="settings_header">
-        <div className="row header">
-        <p>Settings</p>
-        </div>
+    <div className="root">
+      <HeaderV2
+        title={"Settings"}
+        does_nav={true}
+        nav_link={'/home/user'}
+      />
+
+      {is_loaded &&
+        <Stack>
+          <SettingsFormUser user={user_data} updateAuth={updateAuth} />
+
+          <div id="saved-drinks-banner">
+            SavedDrinks
+          </div>
+
+          <SavedDrinks client_id={user_data.id} dom_injecting_callback={() => { }} on_drink_click={() => { }} />
+        </Stack>
+      }
     </div>
   );
 }
 
-const invalidLoginAlert = () => {
-    alert("Current password is incorrect.");
-}
+//==============================================================================
+//  Module - SettingsFormUser
+//==============================================================================
 
-const SettingsFormUser = (props) => {
+const SettingsFormUser = ({ user, updateAuth }) => {
+
   let navigate = useNavigate();
 
-  // added for Settings A3
-  const [inputnewcityandstate, Setinputnewcityandstate] = React.useState("");
+  const [inputnewcity, Setinputnewcity] = React.useState("");
+  const [inputnewstate, Setinputnewstate] = React.useState("");
   const [inputcurrentpassword, Setinputcurrentpassword] = React.useState("");
   const [inputnewpassword, Setinputnewpassword] = React.useState("");
   const [inputconfirmnewpassword, Setinputconfirmnewpassword] = React.useState("");
 
-  const usercitystate = React.useRef(null);
+  const usercity = React.useRef(null);
+  const userstate = React.useRef(null);
   const currentPasswordInput = React.useRef(null);
   const newPasswordInput = React.useRef(null);
   const confirmNewPasswordInput = React.useRef(null);
 
-  const handleCityStateChange = () => {
-    Setinputnewcityandstate(usercitystate.current.value)
+  const handleCityChange = () => {
+    Setinputnewcity(usercity.current.value)
+  }
+
+  const handleStateChange = () => {
+    Setinputnewstate(userstate.current.value)
   }
 
   const handleCurrentPasswordChange = () => {
@@ -53,143 +122,83 @@ const SettingsFormUser = (props) => {
     Setinputconfirmnewpassword(confirmNewPasswordInput.current.value)
   }
 
-  function handleCityState(props) {
-    const element = (
-      <div>
-        <h1>handleCityState - Not implemented yet!</h1>
-      </div>
-    );
-    ReactDOM.render(element, document.getElementById('root'));
+  function handleCityState() {
+    const post_args = {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+
+      //make sure to serialize your JSON body
+      body: JSON.stringify({
+        userId: user.id,
+        city: inputnewcity,
+        state: inputnewstate,
+      })
+    }
+
+    console.log(inputnewcity)
+
+    fetch("http://liquorish-server.azurewebsites.net/updateCityState", post_args).then((response) => {
+
+      // This is just to make the page refresh
+      Setinputnewcity(inputnewcity)
+
+      console.log(response.json)
+    });
   }
 
   function handleReset(props) {
-    const element = (
-      <div>
-        <h1>handleReset - Not implemented yet!</h1>
-      </div>
-    );
-    ReactDOM.render(element, document.getElementById('root'));
+    console.log('not implemented')
   }
-  
+
   function logoutUser(props) {
-    const element = (
-      <div>
-        <h1>logoutUser - Not implemented yet!</h1>
-      </div>
-    );
-    ReactDOM.render(element, document.getElementById('root'));
-  }
-  // add function to validate the user has entered the new password and confirm new password same
-  // If same, reset the password, not same prompt user to enter the password again.
-
-  
-  return (
-    <div>
-        <div className="row desc">
-           <div className="row">
-            <p>BenderactCommandband</p>
-           </div>
-           <div className="row">
-            <p>Birth Date: 1987-06-16</p>
-           </div>
-        </div>
-        <div className="bodyContent">
-           <div className="row">
-              <p>City: Burlington, NC</p>
-           </div>
-            <div className="row">
-                <form>
-                    <input id="user_city_state" type="text" placeholder="(inputnewcityandstate)" ref={ usercitystate } onChange={ handleCityStateChange }/>
-                    <button className="btnPrimary" onClick={ handleCityState }>Search</button>
-                </form>
-            </div>
-            <div className="row">
-            <p>Reset Password</p>
-           </div>
-            <div className="row">
-                <input id="user_currentpassword" type="password" placeholder="(inputcurrentpassword)" ref={ currentPasswordInput } onChange={ handleCurrentPasswordChange }/>
-            </div>
-            <div className="row">
-                <input id="user_newpassword" type="password" placeholder="(inputnewpassword)" ref={ newPasswordInput } onChange={ handleNewPasswordChange }/>
-                <input id="user_confirmNewpassword" type="password" placeholder="(inputconfirmnewpassword)" ref={ confirmNewPasswordInput } onChange={ handleConfirmNewPasswordChange }/>
-            </div>
-        </div>
-        <div className="row">
-          <button className="btnPrimary" onClick={ handleReset }>Reset</button>
-        </div>
-        <div className="row">
-            <button className="btnSecondary" onClick={ logoutUser }>Log Out</button>
-        </div>
-      </div>
-  );
-}
-
-const DrinksFormUser = (props) => {
-
-  const listDrinks = () => {
-    return [
-      {
-        name: "Glenfiddich Whiskey",
-      },
-      {
-        name: "Captain Morgan Spiced Rum",
-      },
-      {
-        name: "Flying Horse Beer",
-      }
-    ]
-  }
-
-  const barListItems = listDrinks.map((data) =>
-    <div>
-        <h1>{ data.name }</h1>
-    </div>
-  );
-
-  const Header = () => {
-    return (
-      <div>
-        <div>Saved Drinks</div>
-      </div>
-    )
+    sessionStorage.clear()
+    updateAuth('0').then(() => {
+      navigate("/")
+    })
   }
 
   return (
-    <div>
-      <Header />
-      { barListItems }
-    </div>
-  )
-}
+    <Stack id="settings-form-user">
+      <Stack id="settings-header">
+        <Row>
+          <h1>{user.username}</h1>
+        </Row>
 
+        <Row>
+          <div>DOB: {user.birth_date.substring(0, user.birth_date.indexOf('T'))}</div>
+        </Row>
 
-const Settings = (props) => {
-  return (
-    <div>
-      <div id="settings_page">
-        <div className="wrapper column">
-          <SettingsHeader />
-          <SettingsFormUser applicationState={ props.applicationState }/>
-        </div>
-      </div>
-    </div>
+        <Row>
+          <div>City/State: {user.address_city}, {user.address_state}</div>
+        </Row>
+      </Stack>
+
+      <Stack id="city-state-form">
+        <Row id="city-state-input">
+          <Col className="g-1">
+            <input id="user_city" type="text" placeholder="City" ref={usercity} onChange={handleCityChange} />
+          </Col>
+          <Col className="g-1">
+            <input id="user_state" type="text" placeholder="State" ref={userstate} onChange={handleStateChange} />
+          </Col>
+        </Row>
+        <Button className="btn-primary" onClick={handleCityState}>Update City/State</Button>
+      </Stack>
+
+      <Stack id="password-input-form">
+        <input id="user_currentpassword" type="password" placeholder="Current Password" ref={currentPasswordInput} onChange={handleCurrentPasswordChange} />
+        <input id="user_newpassword" type="password" placeholder="New Password" ref={newPasswordInput} onChange={handleNewPasswordChange} />
+        <input id="user_confirmNewpassword" type="password" placeholder="Confirm New Password" ref={confirmNewPasswordInput} onChange={handleConfirmNewPasswordChange} />
+      </Stack>
+
+      <Stack>
+        <Button className="btn-primary" id="reset-pass-btn" onClick={handleReset}>Reset Password</Button>
+        <Button className="btn-secondary" onClick={logoutUser}>Log Out</Button>
+      </Stack>
+    </Stack>
   );
 }
 
-const Drinks = (props) => {
-  return (
-    <div>
-      <div id="drinks_page">
-        <div className="wrapper column">
-          <DrinksFormUser applicationState={ props.applicationState }/>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-export default Settings;
-export { Drinks };
-
-// end of additions for Settings A3

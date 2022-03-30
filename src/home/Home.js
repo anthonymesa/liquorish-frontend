@@ -69,7 +69,7 @@ import HeaderV2 from '../headerv2/HeaderV2';
             does_nav={false}
             title={"Welcome " + user_data["username"]}
             elements={[
-              <FiMenu size="2em" onClick={() => { console.log("go to settings...") }} />
+              <FiMenu size="2em" onClick={() => { navigate('/home/user/settings') }} />
             ]}
           />
           <BarList user_id={user_data["id"]} />
