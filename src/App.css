@@ -3,9 +3,11 @@
   height: 100vh;
   width: 100vw;
   color: white;
+  background-image: linear-gradient(to right, #212121, #424242, #212121);
 }
 
 .header {
+  position: relative;
   height: 100px;
   display: flex;
   background: rgb(37, 37, 37);
@@ -23,3 +25,18 @@
   padding: 10px;
   transform: translate(-50%, 0);
 }
+
+.liquorish-footer {
+  position: absolute;
+  height: 4em;
+  display: flex;
+  background: rgb(37, 37, 37);
+  filter: drop-shadow(0 0 0.75rem black);
+  z-index: 100;
+  bottom: 0;
+  width: 100%;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 import { FiPlusCircle } from 'react-icons/fi';
 import { FiChevronLeft } from 'react-icons/fi';
-import { Row, Col, Button, Stack } from 'react-bootstrap';
+import { Row, Col, Button, Stack, Image } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
 const BarHead = (props) => {
@@ -17,7 +17,6 @@ const BarHead = (props) => {
 
   return (
     <Row className="g-0" id="bar_head">
-      <Stack>
         <div className="header">
           <div id="home_nav" onClick={() => { handleHome() }}>
             <FiChevronLeft /> Home
@@ -25,24 +24,24 @@ const BarHead = (props) => {
         </div>
         <div id="bar_info">
           <div id="bar_info_container">
+            <Image src='https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=' width="150"/>
             <h1>{props.bar["bar_name"]}</h1>
             <p>{props.bar["address_street"]}, {props.bar["address_city"]}, {props.bar["address_state"]}, {props.bar["address_zip"]}</p>
           </div>
         </div>
-      </Stack>
     </Row>
   )
 }
 
 const TabPay = () => {
 
-  const handleSignIn = () => {
+  const handleTabPay = () => {
     console.log("paying for tab...")
   }
 
   return (
     <Row className="g-0" id="tab_pay">
-      <Button className="login-button" variant="primary" onClick={handleSignIn}>Pay for tab</Button>
+      <Button id="tab_pay_button" variant="primary" onClick={handleTabPay}>Pay for tab</Button>
     </Row>
   )
 }
@@ -51,7 +50,7 @@ const getTabDrinks = (bar_id, user_id) => {
   return new Promise(async (resolve, reject) => {
     const client_id = sessionStorage.getItem('client_id');
 
-    const url = 'http://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
+    const url = 'https://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
 
     const response = await fetch(url)
     const jsonResponse = await response.json();
@@ -61,15 +60,19 @@ const getTabDrinks = (bar_id, user_id) => {
 }
 
 const TabList = (props) => {
+  const navigate = useNavigate();
 
   const [bar_drinks_dom, setBarDrinksDom] = React.useState(null)
+
+  const handleOrderView = async (drink_data) => {
+    await sessionStorage.setItem('drink', JSON.stringify(drink_data));
+    navigate("/dashboard/orderview", { replace: true });
+  }
 
   const generateTabDrinksDom = async () => {
 
     const test_promise = () => {
       return new Promise((resolve, reject) => {
-
-        console.log(props.bar_id, props.user_id)
 
         getTabDrinks(props.bar_id, props.user_id).then((tab_drinks) => {
           resolve(tab_drinks)
@@ -78,10 +81,10 @@ const TabList = (props) => {
     }
 
     const tab_drinks = await test_promise()
-    
+
     const tab_drinks_dom = await tab_drinks.map((drink_data) =>
-      <div key={drink_data["drink_name"]} className="tab_drink">
-        <Row>
+      <div key={drink_data["drink_name"]} className="tab_drink" onClick={ () => { handleOrderView(drink_data) }}>
+        <Row >
           <h2>{drink_data["drink_name"]}</h2>
         </Row>
       </div>
@@ -101,9 +104,16 @@ const TabList = (props) => {
   )
 }
 
+
 const AddItemToOrder = () => {
+  const navigate = useNavigate();
+
+  const handleAddItemToOrder = () => {
+    navigate("/dashboard/neworder", { replace: true });
+  }
+  
   return (
-    <div id="add_item_to_order">
+    <div id="add_item_to_order" onClick={ handleAddItemToOrder }>
       <FiPlusCircle size={"4em"} />
     </div>
   )
@@ -121,18 +131,34 @@ const Dashboard = () => {
   const [tab_id, setTabId] = React.useState("");
   const [loaded, setIsLoaded] = React.useState(false);
 
+  const getBarData = () => {
+    return new Promise((resolve, reject) => {
+      const session_bar_data = JSON.parse(sessionStorage.getItem('bar'));
+      console.log("Dashboard.getBarData() - Session bar data: " + JSON.stringify(session_bar_data));
+      resolve(session_bar_data);
+    })
+  }
+
+  const getUserId = () => {
+    return new Promise((resolve, reject) => {
+      const session_user_id = JSON.parse(sessionStorage.getItem('client_id'));
+      console.log("Dashboard.getUserId() - Session user id: " + session_user_id);
+      resolve(session_user_id);
+    });
+  }
+
   useEffect(() => {
-    let client_id = JSON.parse(sessionStorage.getItem('client_id'));
-    setUserId(client_id);
-
-    let bar = JSON.parse(sessionStorage.getItem('bar'));
-    setBar(bar);
-
-    setIsLoaded(true)
-  }, [])
+    getBarData().then((_bar_data) => {
+      getUserId().then((_user_id) => {      
+        setBar(_bar_data);
+        setUserId(_user_id);
+        setIsLoaded(true);
+      })
+    });
+  }, []);
 
   return (
-    <div className="root" id="dashboard_root">
+    <div className="root">
       <Stack id="dashboard_contents">
         <BarHead bar={bar} />
         <TabPay tab_id={tab_id} user_id={user_id} />
