@@ -3,6 +3,7 @@ import './NewOrder.css';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import HeaderV2 from '../headerv2/HeaderV2';
+import { Button, Row } from 'react-bootstrap';
 
 const Header = () => {
 
@@ -73,7 +74,9 @@ const NewOrderList = (props) => {
 
   return (
     <div>
-      {bar_drinks_dom}
+      <Row className="g-0" id="drink_list">
+        {bar_drinks_dom}
+      </Row>
     </div>
   )
 }
@@ -92,8 +95,8 @@ const NewOrderAction = () => {
 
   return (
     <div className="liquorish-footer">
-      <button onClick={handleSavedDrinks}>Saved Drinks</button>
-      <button onClick={handleMixYourOwn}>Mix Your Own!</button>
+      <Button className="btn btn-primary" id="saved-drinks-btn" onClick={handleSavedDrinks}>Saved Drinks</Button>
+      <Button className="btn btn-secondary" onClick={handleMixYourOwn}>Mix Your Own!</Button>
     </div>
   )
 }
@@ -115,7 +118,6 @@ const NewOrder = () => {
   const getBarData = () => {
     return new Promise((resolve, reject) => {
       const session_bar_data = JSON.parse(sessionStorage.getItem('bar'));
-      console.log("NewOrder.getBarData() - Session bar data: " + JSON.stringify(session_bar_data));
       resolve(session_bar_data);
     })
   }
@@ -123,7 +125,6 @@ const NewOrder = () => {
   const getUserId = () => {
     return new Promise((resolve, reject) => {
       const session_user_id = JSON.parse(sessionStorage.getItem('client_id'));
-      console.log("NewOrder.getUserId() - Session user id: " + session_user_id);
       resolve(session_user_id);
     });
   }
@@ -131,7 +132,6 @@ const NewOrder = () => {
   useEffect(() => {
     getBarData().then((_bar_data) => {
       getUserId().then((_user_id) => {
-        console.log(_bar_data)
         setBarData(_bar_data);
         setUserId(_user_id);
         setIsLoaded(true);

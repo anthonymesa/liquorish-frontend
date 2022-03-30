@@ -36,9 +36,6 @@ const HeaderV2 = ({ does_nav = false, nav_name, nav_link, title, elements = [], 
   }
 
   useEffect(async () => {
-
-    console.log("HeaderV2.useEffect([]) - Rendering header!")
-
     const bootstrapped_element_cols = await elements.map((element) =>
       <Col className="headerv2-elements-col">
         {element}
@@ -60,7 +57,7 @@ const HeaderV2 = ({ does_nav = false, nav_name, nav_link, title, elements = [], 
       {/* This is the left floating nav-button */}
       {does_nav &&
         <div className="headerv2-nav" onClick={() => { handleBack() }}>
-          <FiChevronLeft /> {nav_name}
+          <FiChevronLeft /> {/* {nav_name} */}
         </div>
       }
 
