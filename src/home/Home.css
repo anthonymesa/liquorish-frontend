@@ -1,8 +1,4 @@
 
-#home-root{
-    background-image: linear-gradient(to right, #212121, #424242, #212121);
-}  
-
 #greeting {
     flex-grow: 1;
     margin: auto 0;

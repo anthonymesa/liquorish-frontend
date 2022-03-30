@@ -1,0 +1,93 @@
+
+#bar_head {
+    position: relative;
+    width: 100%;
+}
+
+#tab_pay_button {
+  margin-left: 50%;
+  transform: translate(-50%, 0);
+  margin-bottom: 5px;
+}
+
+#home_nav {
+  font-size: x-large;
+  float: left;
+  padding: 20px 0;
+  padding-left: 20px;
+}
+
+#bar_info::before{
+  content: '';
+  position: absolute;
+  width:100%;
+  height: 100%;
+  background-position-y: 50%;
+  background-size: cover;
+  background-image: url(https://www.studyfinds.org/wp-content/uploads/2019/07/alcohol-bar-beer-1283219.jpg);
+  filter:blur(10px) brightness(.75);
+
+}
+
+#bar_info {
+    position: relative;
+    height: 350px;
+}
+
+#bar_info_container {
+  position: absolute;
+  width: 75%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#tab_pay {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    background: rgb(37, 37, 37);
+    filter: drop-shadow(0 0 0.75rem black);
+    z-index: 100;
+}
+
+.tab_drink {
+  position:relative;
+  width: 96%;
+  border-radius: 5px;
+  background: rgb(32, 32, 32);
+  border-radius: 10px;
+  border-color: rgb(66, 66, 66);
+  border-style: solid;
+  filter: drop-shadow(0 0 0.5rem black);
+  margin: 10px 0;
+  padding: 20px;
+  transform: translate(2%, 0);
+  overflow: hidden;
+}
+
+#tab_list {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#add_item_to_order {
+  display: block;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 100;
+  background: var(--bs-blue);
+  filter: drop-shadow(0 0 0.5rem rgba(0,0,0,.5));
+  border-radius: 50%;
+  padding: 10px;
+}
+
+#dashboard_contents {
+  height: 100%;
+}
+
+#bar-image {
+  margin-bottom: 20px;
+}
