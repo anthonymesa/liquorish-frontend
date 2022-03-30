@@ -12,6 +12,7 @@ import Dashboard from './dashboard/Dashboard'
 import OrderView from './order_view/OrderView';
 import NewOrder from './new_order/NewOrder';
 import AddRto from './add_rto/AddRto';
+import BarNewuser from './new_user/BarNewuser';
 
 const App = (props) => {
 
@@ -86,6 +87,7 @@ const App = (props) => {
         <Routes>
           <Route path="/" element={<Navigate to="/home/user" />} />
           <Route path="/home/user" element={<Home />} />
+          <Route path="/home/newuser" element={<BarNewuser />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/orderview" element={<OrderView />} />
           <Route path="/dashboard/neworder" element={<NewOrder />} />
