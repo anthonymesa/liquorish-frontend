@@ -62,7 +62,7 @@ import HeaderV2 from '../headerv2/HeaderV2';
   }, []);
 
   return (
-    <div className="root" id="home-root">
+    <div className="root">
       {page_ready &&
         <div>
           <HeaderV2
