@@ -122,8 +122,6 @@ const SettingsFormUser = ({ user, updateAuth }) => {
     Setinputconfirmnewpassword(confirmNewPasswordInput.current.value)
   }
 
-  const savedDrinks = ["GlenLevit Whisky", "Captain Morgan Rum", "Greygoose Vodka"];
-
   function handleCityState() {
     const post_args = {
       method: "post",
@@ -142,7 +140,7 @@ const SettingsFormUser = ({ user, updateAuth }) => {
 
     console.log(inputnewcity)
 
-    fetch("http://liquorish-server.azurewebsites.net/updateCityState", post_args).then((response) => {
+    fetch("https://liquorish-server.azurewebsites.net/updateCityState", post_args).then((response) => {
 
       // This is just to make the page refresh
       Setinputnewcity(inputnewcity)
