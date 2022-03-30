@@ -81,7 +81,7 @@ function BarHead({bar}){
     <Row className="g-0" id="bar_head">
       <div id="bar_info">
         <div id="bar_info_container">
-          <Image src='https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=' width="150" />
+          <Image id="bar-image" src='https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=' width="150" />
           <h1>{bar["bar_name"]}</h1>
           <p>{bar["address_street"]}, {bar["address_city"]}, {bar["address_state"]}, {bar["address_zip"]}</p>
         </div>

@@ -57,7 +57,7 @@ const HeaderV2 = ({ does_nav = false, nav_name, nav_link, title, elements = [], 
       {/* This is the left floating nav-button */}
       {does_nav &&
         <div className="headerv2-nav" onClick={() => { handleBack() }}>
-          <FiChevronLeft /> {nav_name}
+          <FiChevronLeft /> {/* {nav_name} */}
         </div>
       }
 

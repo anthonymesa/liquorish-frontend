@@ -37,3 +37,12 @@
   transform: translate(2%, 0);
   overflow: hidden;
 }
+
+#ingredients-list {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#drink-image {
+  margin-bottom: 20px;
+}

@@ -9,7 +9,7 @@ const DrinkInfo = (props) => {
   return (
     <div id="drink_info">
       <div id="drink_info_container">
-        <Image src='https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=' width="150" />
+        <Image id="drink-image" src='https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=' width="150" />
         <h1>{props.drink.drink_name}</h1>
         <p>{props.drink.description}</p>
       </div>
@@ -55,14 +55,9 @@ const DrinkIngredients = (props) => {
 
   return (drink_ingredients_list &&
   <div>
-    <div>
-      <div id="ingredients_divider">
-        Ingredients
-      </div>
-      <div>
+      <div id="ingredients-list">
         {drink_ingredients_list}
       </div>
-    </div>
   </div>
 
   );
@@ -77,6 +72,10 @@ const DrinkView = ({ drink_data }) => {
   return (drink_data && 
     <div>
       <DrinkInfo drink={drink_data} />
+      <div id="ingredients_divider">
+        Ingredients
+      </div>
+
       <DrinkIngredients drink={drink_data} />
     </div>
   );

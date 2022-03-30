@@ -87,3 +87,7 @@
 #dashboard_contents {
   height: 100%;
 }
+
+#bar-image {
+  margin-bottom: 20px;
+}

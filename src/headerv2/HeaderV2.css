@@ -16,13 +16,12 @@
 .headerv2-nav {
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 7%;
   margin: 0;
   padding: 0;
-  padding-right: 20px;
   font-size: medium;
-  vertical-align: middle;
-  transform: translate(0, -60%);
+  transform: translate(0, -25%);
+  scale: 250%;
 }
 
 .headerv2-title {
