@@ -56,7 +56,7 @@ const SavedBarDrinksList = ({ user_id, bar_id }) => {
 
     const getSavedBarDrinks = (user_id, bar_id) => {
         return new Promise(async (resolve, reject) => {
-            const url = 'https://liquorish-server.azurewebsites.net/savedBarList/' + user_id + '/' + bar_id;
+            const url = 'https://liquorish-server.azurewebsites.net/savedBarList/' + bar_id + '/' + user_id;
             const response = await fetch(url)
             const jsonResponse = await response.json();
             resolve(jsonResponse.value)
