@@ -14,6 +14,7 @@ import NewOrder from "./new_order/NewOrder";
 import AddRto from "./add_rto/AddRto";
 import Settings from "./settings/Settings";
 import OrderSavedDrinks from "./order_saved/OrderSavedDrinks";
+import AddSaved from "./add_saved/AddSaved";
 
 const App = (props) => {
   /**
@@ -89,7 +90,6 @@ const App = (props) => {
           <Routes>
             <Route path="/" element={<Navigate to="/home/user" />} />
             <Route path="/home/user" element={<Home />} />
-            <Route path="/home/ordersaved" element={<OrderSavedDrinks />} />
             <Route
               path="/home/user/settings"
               element={<Settings updateAuth={updateAuth} />}
@@ -98,6 +98,8 @@ const App = (props) => {
             <Route path="/dashboard/orderview" element={<OrderView />} />
             <Route path="/dashboard/neworder" element={<NewOrder />} />
             <Route path="/dashboard/neworder/addrto" element={<AddRto />} />
+            <Route path="/dashboard/neworder/ordersaved" element={<OrderSavedDrinks />} />
+            <Route path="/dashboard/neworder/ordersaved/addsaved" element={<AddSaved />} />
             <Route path="*" element={<Navigate to="/home/user" />} />
           </Routes>
         </BrowserRouter>

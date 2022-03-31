@@ -86,7 +86,7 @@ const NewOrderAction = () => {
   const navigate = useNavigate();
 
   const handleSavedDrinks = () => {
-    console.log("NewOrder::NewOrderAction.handleSavedDrinks - Clicked!");
+    navigate('/dashboard/neworder/ordersaved')
   }
 
   const handleMixYourOwn = () => {

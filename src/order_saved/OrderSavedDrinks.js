@@ -1,94 +1,76 @@
-//import './Settings.css';
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-//import ValidateAuth from "../Auth";
+
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-//import {  Row, Stack, Button, Alert, Image  } from 'react-bootstrap';
 import { Row, Stack } from "react-bootstrap";
-//import '../../../liquorish-backend/routes/get/getSavedDrinks';
-//import '../../../liquorish-backend/routes/get/updateUserCityState';
-//import '../../../liquorish-backend/routes/get/updateUserPassword';
+import HeaderV2 from "../headerv2/HeaderV2";
+import './OrderSaved.css'
 
-const OrderSavedDrinksHeader = () => {
-  return (
-    <Stack id="ordersaveddrinks_header">
-      <Row id="row-header">
-        <p>
-          <a href="/">back</a>
-        </p>
-        <p>Order Saved Drinks</p>
-      </Row>
-    </Stack>
-  );
-};
+export default function OrderSavedDrinks(props){
 
-const OrderSavedDrinksForm = (props) => {
-  let navigate = useNavigate();
-
-  const checkList = [
-    "GlenLevit Whisky",
-    "Captain Morgan Rum",
-    "Greygoose Vodka",
-  ];
-
-  const [checked, setChecked] = React.useState([]);
-
-  const handleCheck = (event) => {
-    var updatedList = [...checked];
-    if (event.target.checked) {
-      updatedList = [...checked, event.target.value];
-    } else {
-      updatedList.splice(checked.indexOf(event.target.value), 1);
-    }
-    setChecked(updatedList);
-  };
-
-  // Generate string of checked items
-  const checkedItems = checked.length
-    ? checked.reduce((total, item) => {
-        return total + ", " + item;
-      })
-    : "";
-
-  // Return classes based on whether item is checked
-  var isChecked = (item) =>
-    checked.includes(item) ? "checked-item" : "not-checked-item";
-
-  const handleAddItems = () => {
-    console.log({ checkedItems });
-    alert("Add the items to the Order.");
-  };
-
-  return (
-    <div className="app">
-      <div className="list-container">
-        {checkList.map((item, index) => (
-          <div key={index}>
-            <input value={item} type="checkbox" onChange={handleCheck} />
-            <span className={isChecked(item)}>{item}</span>
-          </div>
-        ))}
-      </div>
-      <div>
-        <button onClick={handleAddItems} variant="primary">
-          Order
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const OrderSavedDrinks = (props) => {
-  return (
-    <div>
-      <div id="barsetting_page">
-        <div className="wrapper column">
-          <OrderSavedDrinksHeader />
-          <OrderSavedDrinksForm applicationState={props.applicationState} />
+    return (
+        <div className="root">
+            <HeaderV2
+                does_nav={true}
+                nav_link={"/dashboard/neworder"}
+                title={"Add Saved Drink to Order"}
+            />
+            
+            <SavedBarDrinksList user_id={2} bar_id={2}/>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default OrderSavedDrinks;
+const SavedBarDrinksList = ({user_id, bar_id}) => {
+
+    const [saved_bar_drinks_dom, setSavedBarDrinksDom] = React.useState(null)
+
+    const getSavedBarDrinks = (user_id, bar_id) => {
+        return new Promise(async (resolve, reject) => {
+            const url = 'https://liquorish-server.azurewebsites.net/savedBarList/' + user_id + '/' + bar_id;
+            const response = await fetch(url)
+            const jsonResponse = await response.json();
+            resolve(jsonResponse.value)
+        })
+    }
+
+    const generateSavedBarDrinksDom = (saved_bar_drinks) => {
+        return saved_bar_drinks.map((saved_bar_drink) => <SavedBarDrinksElement saved_bar_drink={saved_bar_drink}/>)
+    }
+
+    const generateSavedBarDrinksList = (saved_bar_drinks) => {
+        const saved_bar_drinks_dom = generateSavedBarDrinksDom(saved_bar_drinks)
+        setSavedBarDrinksDom(saved_bar_drinks_dom)
+    }
+
+    const initializeDrinksList = () => getSavedBarDrinks(user_id, bar_id).then(generateSavedBarDrinksList)
+
+    useEffect(() => {
+        initializeDrinksList()
+    }, [])
+
+    return(
+        <Row className="g-0" id="saved_bar_drinks_list">
+            { saved_bar_drinks_dom }
+        </Row>
+    )
+}
+
+function SavedBarDrinksElement({saved_bar_drink}){
+
+    const navigate = useNavigate();
+
+    const handleSavedBarDrinkClick = (drink_data) => {
+      sessionStorage.setItem('drink_data', JSON.stringify(saved_bar_drink))
+      navigate("/dashboard/neworder/ordersaved/addsaved", { replace: true });
+    }
+  
+    return (
+      <div key={saved_bar_drink["drink_name"]} className="tab_drink" onClick={() => { handleSavedBarDrinkClick(saved_bar_drink) }}>
+        <Row >
+          <h2>{saved_bar_drink["drink_name"]}</h2>
+        </Row>
+      </div>
+    )
+}
+
+
