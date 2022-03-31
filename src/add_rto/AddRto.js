@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import HeaderV2 from '../headerv2/HeaderV2'
 import DrinkView from '../DrinkView/DrinkView'
 import { useNavigate } from 'react-router'
+import { Button } from 'react-bootstrap'
 
 const AddRtoFooter = () => {
 
@@ -17,7 +18,7 @@ const AddRtoFooter = () => {
 
   return (
     <div className="liquorish-footer">
-      <button onClick={handle_order}>Order!</button>
+      <Button className="btn btn-primary" id="order-btn" onClick={handle_order}>Order!</Button>
     </div>
   )
 }
@@ -59,7 +60,6 @@ const AddRto = () => {
             title={"Drinks Ready To Order!"}
             elements={[
               <DrinkPrice drink_price={drink_data["price"]}/>,
-              <DrinkPrice drink_price={drink_data["price"]}/>
             ]}
             unstore={['drink_data']}
           />

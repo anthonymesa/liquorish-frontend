@@ -14,6 +14,11 @@
   overflow: hidden;
 }
 
+#drink_list {
+  width: 100%;
+  margin-top: 10px;
+}
+
 .new-order-name {
   position: absolute;
   left: 20px;
@@ -22,4 +27,14 @@
 .new-order-price {
   position: absolute;
   right: 20px;
+}
+
+.liquorish-footer {
+  display:flex;
+  padding: 10px;
+}
+
+#saved-drinks-btn {
+  flex-grow: 1;
+  margin-right: 10px;
 }
