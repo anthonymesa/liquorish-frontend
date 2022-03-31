@@ -25,7 +25,11 @@ const OrderSavedDrinksHeader = () => {
 const OrderSavedDrinksForm = (props) => {
   let navigate = useNavigate();
 
-  const checkList = ["Apple", "Banana", "Tea", "Coffee"];
+  const checkList = [
+    "GlenLevit Whisky",
+    "Captain Morgan Rum",
+    "Greygoose Vodka",
+  ];
 
   const [checked, setChecked] = React.useState([]);
 
