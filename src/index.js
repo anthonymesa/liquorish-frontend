@@ -88,7 +88,6 @@ const App = (props) => {
         <Routes>
           <Route path="/" element={<Navigate to="/home/user" />} />
           <Route path="/home/user" element={<Home />} />
-          
           <Route path="/home/user/settings" element={<Settings updateAuth={updateAuth}/>} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/orderview" element={<OrderView />} />
@@ -112,8 +111,8 @@ const App = (props) => {
     return (page_ready &&
       <BrowserRouter>
         <Routes>
-        <Route path="/AddBar" element={<AddBar />}/>
           <Route path="/" element={<Login updateAuth={updateAuth} />} />
+          <Route path="/AddBar" element={<AddBar />}/>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

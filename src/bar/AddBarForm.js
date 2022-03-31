@@ -5,6 +5,7 @@ import logo from '../media/logo.svg';
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Stack, Button, Alert, Image } from 'react-bootstrap';
+import HeaderV2 from '../headerv2/HeaderV2'
 
 //==============================================================================
 //  Module - Login
@@ -23,10 +24,13 @@ export default function AddBarForm({ updateAuth }) {
 console.log("AddBarForm")
   return (
     <div className="root" id="login-root">
-      <p>AddBarForm</p>
       <Row className="g-0" id="login-contents">
 
-        <BarHeader />
+        <HeaderV2 
+          does_nav={true}
+          title={"test"}
+          nav_link={"/"}
+        />
 
         {/* Passing the callback property to the polyform */}
         <PolyForm />
