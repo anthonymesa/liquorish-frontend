@@ -56,16 +56,13 @@ const OrderSavedDrinksForm = (props) => {
 
   return (
     <div className="app">
-      <div className="checkList">
-        <div className="title">Your CheckList:</div>
-        <div className="list-container">
-          {checkList.map((item, index) => (
-            <div key={index}>
-              <input value={item} type="checkbox" onChange={handleCheck} />
-              <span className={isChecked(item)}>{item}</span>
-            </div>
-          ))}
-        </div>
+      <div className="list-container">
+        {checkList.map((item, index) => (
+          <div key={index}>
+            <input value={item} type="checkbox" onChange={handleCheck} />
+            <span className={isChecked(item)}>{item}</span>
+          </div>
+        ))}
       </div>
 
       <div>{`Items checked are: ${checkedItems}`}</div>
