@@ -54,6 +54,11 @@ const OrderSavedDrinksForm = (props) => {
   var isChecked = (item) =>
     checked.includes(item) ? "checked-item" : "not-checked-item";
 
+  const handleAddItems = () => {
+    console.log({ checkedItems });
+    alert("Add the items to the Order.");
+  };
+
   return (
     <div className="app">
       <div className="list-container">
@@ -64,8 +69,11 @@ const OrderSavedDrinksForm = (props) => {
           </div>
         ))}
       </div>
-
-      <div>{`Items checked are: ${checkedItems}`}</div>
+      <div>
+        <button onClick={handleAddItems} variant="primary">
+          Order
+        </button>
+      </div>
     </div>
   );
 };
