@@ -22,31 +22,28 @@ const DrinkIngredients = (props) => {
 
     const [drink_ingredients_list, setDrinkIngredientsList] = React.useState([])
 
-    useEffect(() => {
-        getDrinkIngredientsDom(props.drink["drink_id"]).then((drink_ingredient_dom) => {
-            setDrinkIngredientsList(drink_ingredient_dom);
-        })
-    }, [])
-
-    const getDrinkIngredientsDom = (drink_id) => {
+    const getIngredients = () => {
         return new Promise(async (resolve, reject) => {
+
             const url = 'https://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
-            console.log(url)
             const response = await fetch(url);
             const jsonResponse = await response.json();
-            console.log(JSON.stringify(jsonResponse.value))
-            const drink_ingredients_list = jsonResponse.value;
-            const drink_ingredients_dom = drink_ingredients_list.map((drink_ingredient) =>
-                <div key={drink_ingredient.ingredient_id} className="drink_ingredient">
-                    <Row className="g-0">
-                        <h2>{drink_ingredient.name}</h2>
-                    </Row>
-                </div>
-            );
-
-            resolve(drink_ingredients_dom)
-        });
+            resolve(jsonResponse.value)
+        }
     }
+
+    const generateIngredientsList = (_ingredients) => {
+        const ingredient_list_dom = generateIngredientsListDom(_ingredients)
+        setDrinkIngredientsList(ingredient_list_dom)
+    }
+
+    const generateIngredientsListDom = (_ingredients) => {
+        return _ingredients.map((ingredient) => <IngredientElement ingredient={ingredient} />)
+    }
+
+    useEffect(() => {
+        getIngredients().then(generateIngredientsList)
+    }, [])
 
     return (drink_ingredients_list &&
         <Row className="g-0" id="ingredients-list">
@@ -70,6 +67,24 @@ const DrinkView = ({ drink_data, user_id }) => {
             <DrinkIngredients drink={drink_data} />
         </div>
     );
+}
+
+function TabListElement({ drink_data }) {
+
+    const navigate = useNavigate();
+
+    const handleOrderView = async (drink_data) => {
+        await sessionStorage.setItem('drink', JSON.stringify(drink_data));
+        navigate("/dashboard/orderview", { replace: true });
+    }
+
+    return (
+        <div key={drink_ingredient.ingredient_id} className="drink_ingredient">
+            <Row className="g-0">
+                <h2>{drink_ingredient.name}</h2>
+            </Row>
+        </div>
+    )
 }
 
 export default DrinkView
