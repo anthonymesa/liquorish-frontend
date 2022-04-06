@@ -33,7 +33,8 @@ const DrinkPrice = ({drink_price}) => {
 
 const AddRto = () => {
 
-  const [drink_data, setDrinkData] = React.useState(null);
+  const [drink_data, setDrinkData] = React.useState(null)
+    const [user_id, setUserId] = React.useState(null)
 
   const getDrinkData = () => {
     return new Promise((resolve, reject) => {
@@ -45,13 +46,17 @@ const AddRto = () => {
   useEffect(() => {
     getDrinkData().then((_drink_data) => {
       setDrinkData(_drink_data);
+
+      const session_user_id = JSON.parse(sessionStorage.getItem('client_id'));
+        setUserId(session_user_id)
+        
     })
 
   }, []);
 
   return (
     <div className="root">
-      {drink_data &&
+      {(drink_data && user_id) && 
         <div>
           <HeaderV2
             does_nav={true}
@@ -63,7 +68,7 @@ const AddRto = () => {
             ]}
             unstore={['drink_data']}
           />
-          <DrinkView drink_data={drink_data}/>
+          <DrinkView user_id={user_id} drink_data={drink_data}/>
           <AddRtoFooter />
         </div>
       }
