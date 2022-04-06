@@ -42,10 +42,12 @@ export default function Dashboard() {
       
     getBarData().then((_bar_data) => {
       getUserId().then((_user_id) => {
-        setBar(_bar_data);
-        setUserId(_user_id);
-        console.log(_bar_data.id + " " + _user_id)
-        setIsLoaded(true);
+        getTabId(_user_id).then((_tab_id) => {
+            setBar(_bar_data);
+            setUserId(_user_id);
+            console.log(_bar_data.id + " " + _user_id)
+            setIsLoaded(true);
+        })
       })
     });
   }, []);
