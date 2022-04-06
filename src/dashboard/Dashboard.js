@@ -39,10 +39,12 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+      
     getBarData().then((_bar_data) => {
       getUserId().then((_user_id) => {
         setBar(_bar_data);
         setUserId(_user_id);
+        console.log(_bar_data.id + " " + _user_id)
         setIsLoaded(true);
       })
     });
