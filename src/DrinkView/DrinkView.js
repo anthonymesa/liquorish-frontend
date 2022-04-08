@@ -4,6 +4,7 @@ import './DrinkView.css'
 import React, { useEffect } from 'react'
 import { Row, Col, Button, Stack, Image } from 'react-bootstrap';
 import AddFavorite from '../add_favorite/AddFavorite';
+import { useNavigate } from "react-router-dom";
 
 const DrinkInfo = (props) => {
 
@@ -18,18 +19,19 @@ const DrinkInfo = (props) => {
     );
 }
 
-const DrinkIngredients = (props) => {
+const DrinkIngredients = ({drink_data}) => {
 
     const [drink_ingredients_list, setDrinkIngredientsList] = React.useState([])
 
-    const getIngredients = () => {
+    const getIngredients = (drink_id) => {
         return new Promise(async (resolve, reject) => {
-
             const url = 'https://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
-            const response = await fetch(url);
+            console.log("DrinkView.DrinkIngredients.getIngredients.url => " + url)
+            const response = await fetch(url, {mode:'cors'});
             const jsonResponse = await response.json();
+            console.log("DrinkView.DrinkIngredients.getIngredients.jsonResponse => " + JSON.stringify(jsonResponse))
             resolve(jsonResponse.value)
-        }
+        });
     }
 
     const generateIngredientsList = (_ingredients) => {
@@ -42,7 +44,8 @@ const DrinkIngredients = (props) => {
     }
 
     useEffect(() => {
-        getIngredients().then(generateIngredientsList)
+        console.log("DrinkView.DrinkIngredients.props.drink_data => " + JSON.stringify(drink_data))
+        getIngredients(drink_data.drink_id).then(generateIngredientsList)
     }, [])
 
     return (drink_ingredients_list &&
@@ -53,7 +56,9 @@ const DrinkIngredients = (props) => {
 }
 
 const DrinkView = ({ drink_data, user_id }) => {
-    console.log(user_id)
+    console.log("DrinkView.props.drink_data => " + JSON.stringify(drink_data))
+    console.log("DrinkView.props.user_id => " + JSON.stringify(user_id))
+
     return (drink_data && user_id &&
         <div>
             <AddFavorite className="add-drink-favorite" user_id={user_id} drink_id={drink_data.drink_id} />
@@ -64,24 +69,24 @@ const DrinkView = ({ drink_data, user_id }) => {
                 Ingredients
             </div>
 
-            <DrinkIngredients drink={drink_data} />
+            <DrinkIngredients drink_data={drink_data} />
         </div>
     );
 }
 
-function TabListElement({ drink_data }) {
+function IngredientElement({ ingredient }) {
 
     const navigate = useNavigate();
 
-    const handleOrderView = async (drink_data) => {
-        await sessionStorage.setItem('drink', JSON.stringify(drink_data));
-        navigate("/dashboard/orderview", { replace: true });
-    }
+    // const handleOrderView = async (drink_data) => {
+    //     await sessionStorage.setItem('drink', JSON.stringify(drink_data));
+    //     navigate("/dashboard/orderview", { replace: true });
+    // }
 
     return (
-        <div key={drink_ingredient.ingredient_id} className="drink_ingredient">
+        <div key={ingredient.ingredient_id} className="drink_ingredient">
             <Row className="g-0">
-                <h2>{drink_ingredient.name}</h2>
+                <h2>{ingredient.name}</h2>
             </Row>
         </div>
     )
