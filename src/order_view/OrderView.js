@@ -7,6 +7,7 @@ import DrinkView from '../DrinkView/DrinkView';
 const OrderView = () => {
 
   const [drink, setDrink] = React.useState(null);
+  const [user_id, setUserId] = React.useState(null)
 
   /**
    * sessionStorage doesn't require this be a Promise but we could need promise
@@ -26,6 +27,8 @@ const OrderView = () => {
   useEffect(() => {
     getDrinkData().then((_drink_data) => {
       setDrink(_drink_data);
+      const session_user_id = JSON.parse(sessionStorage.getItem('client_id'));
+      setUserId(session_user_id)
     });
   }, [])
 
@@ -43,7 +46,7 @@ const OrderView = () => {
             unstore={['drink']}
           />
 
-          <DrinkView drink_data={drink} />
+          <DrinkView drink_data={drink} user_id={user_id} />
         </div>
       }
     </div>
