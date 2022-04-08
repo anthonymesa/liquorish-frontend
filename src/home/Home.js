@@ -1,10 +1,11 @@
-import './Home.css';
+import './Home.css'
 
-import React, { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { useNavigate } from "react-router-dom"
 import { FiMenu } from 'react-icons/fi'
-import { Row, Col } from 'react-bootstrap';
-import HeaderV2 from '../headerv2/HeaderV2';
+import { Row } from 'react-bootstrap'
+import HeaderV2 from '../headerv2/HeaderV2'
+import PollingLayer from '../polling_layer/PollingLayer'
 
 //==============================================================================
 //  Module - Home
@@ -13,12 +14,12 @@ import HeaderV2 from '../headerv2/HeaderV2';
 /**
  * The main home module
  */
- export default function Home(){
+export default function Home() {
 
   const navigate = useNavigate();
 
   const [user_data, setUserData] = React.useState({});
-  const [page_ready, setPageReady] = React.useState(false);
+  const [is_loaded, setIsLoaded] = React.useState(false);
 
   /**
    * Gets the8 users data via API call. specifically, this checks to see if the 
@@ -50,9 +51,9 @@ import HeaderV2 from '../headerv2/HeaderV2';
       // This function runs on 'resolve'
 
       setUserData(_user_data);
-      setPageReady(true);
+      setIsLoaded(true);
     }, () => {
-      
+
       // This funciton runs on 'reject', removing user auth and redirecting them
       // to the login.
 
@@ -63,13 +64,13 @@ import HeaderV2 from '../headerv2/HeaderV2';
 
   return (
     <div className="root">
-      {page_ready &&
+      {is_loaded &&
         <div>
           <HeaderV2
             does_nav={false}
             title={"Welcome " + user_data["username"]}
             elements={[
-              <FiMenu size="2em" onClick={() => { console.log("go to settings...") }} />
+              <FiMenu size="2em" onClick={() => { navigate('/home/user/settings') }} />
             ]}
           />
           <BarList user_id={user_data["id"]} />
@@ -86,92 +87,110 @@ import HeaderV2 from '../headerv2/HeaderV2';
 /**
  * Bar list that is propagated dynamically
  */
-function BarList(){
+function BarList() {
 
-  /**
-   * Using navigate allows us to navigate pages
-   */
-  const navigate = useNavigate();
-
-  /**
-   * The bar_list state is an array of bar objects to be displayed
-   */
   const [bar_list, setBarList] = React.useState([])
-  const [element_ready, setElementReady] = React.useState(false);
+  const [is_loaded, setIsLoaded] = React.useState(false)
+
+  /**
+   *  Only runs on initial component mount
+   */
+  useEffect(() => {
+    const client_id = sessionStorage.getItem('client_id')
+    intializeBarList(client_id)
+  }, []);
+
+  /**
+   *  Creating this handle here so that it can be used in both useEffect and 
+   *  updateBarList below.
+   */
+  const intializeBarList = (_client_id) => getBarList(_client_id).then(generateBarList, clearBarList)
+
+  /**
+   *  Converts the provided list of bar objects into a list of corresponding
+   *  JSX elements and returns it.
+   */
+  const generateBarListDom = (_bar_list) => {
+    return _bar_list.map((bar_data, index) => <BarListElement bar_data={bar_data} index={index} />)
+  }
+
+  /**
+   * Gets the bar list JSX dom to display and updates the module state with said 
+   * JSX dom, then sets is_loaded to true to refresh the page.
+   */
+  const generateBarList = (_bar_list) => {
+    const bar_list_dom = generateBarListDom(_bar_list)
+    setBarList(bar_list_dom);
+    setIsLoaded(true);
+  }
+
+  /**
+   * Turns off the bar list from rendering by setting is_loaded to false.
+   */
+  const clearBarList = () => { setIsLoaded(false) }
 
   /**
    * Get the list of bars that will be used for generating the bar list dom.
    */
-  const getBarList = () => {
+  const getBarList = (_client_id) => {
     return new Promise(async (resolve, reject) => {
-
-      const client_id = sessionStorage.getItem('client_id');
-      const url = 'https://liquorish-server.azurewebsites.net/bars/' + client_id;
+      const url = 'https://liquorish-server.azurewebsites.net/bars/' + _client_id;
       const response = await fetch(url);
       const jsonResponse = await response.json();
-
       resolve(jsonResponse.value)
     });
   }
 
+  const updateBarList = () => {
+    const client_id = sessionStorage.getItem('client_id')
+    intializeBarList(client_id)
+  }
+
   /**
-   * This function is declared within this module, instead of removing it as a seperate
-   * function outside the module, so that 'navigate' is in scope, as navigate 
-   * can only be declared within a React module.
+   * Display the bar list only if the content is loaded.
+   */
+  return (is_loaded &&
+    <div>
+      { bar_list }
+
+      <PollingLayer polling_time={1000} timeout_ref={'bar_list_poll'} action={ updateBarList }/>
+    </div>
+  )
+}
+
+//==============================================================================
+//  Module - BarListElement
+//==============================================================================
+
+/**
+ *  This module defines a single element of the bar list.
+ */
+function BarListElement({ bar_data: _bar_data, index: _index }) {
+
+  // Required to be able to navigate onClick
+  const navigate = useNavigate()
+
+  /**
+   *  Set bar_data to sessionStorage and then go to the dashboard.
    */
   const handleClickBar = (_bar_data) => {
     sessionStorage.setItem('bar', JSON.stringify(_bar_data));
     navigate("/dashboard", { replace: true });
   }
 
-  /**
-   * useEffect runs the provided callback once on page load
-   */
-  useEffect(() => {
-    getBarList().then((_bar_list) => {
-      /**
-       * Dynamically create a list of divs that represent our bar objects by iterating
-       * across the list of bar objects using .map().
-       */
-      const bar_list_dom = _bar_list.map((bar_data) =>
-        <div key={JSON.stringify(bar_data)} className="bar_list_item" onClick={() => { handleClickBar(bar_data) }}>
-          <Row className="g-0">
-            <h2>{bar_data.bar_name}</h2>
-          </Row>
-          <Row className="g-0">
-            <p>{bar_data.address_street},
-              {bar_data.address_city},
-              {bar_data.address_state},
-              {bar_data.address_zip}</p>
-          </Row>
-        </div>
-      );
-
-      setBarList(bar_list_dom);
-      setElementReady(true);
-    }, () => {
-
-      // This code runs on 'reject'
-
-      setElementReady(false);
-    })
-  }, []);
-
-  return (element_ready &&
-    <div>
-      {bar_list}
+  return (
+    <div key={JSON.stringify(_bar_data.id) + _index} className="bar_list_item" onClick={() => { handleClickBar(_bar_data) }}>
+      <Row className="g-0">
+        <h2>{_bar_data.bar_name}</h2>
+      </Row>
+      <Row className="g-0">
+        <p>
+          {_bar_data.address_street},
+          {_bar_data.address_city},
+          {_bar_data.address_state},
+          {_bar_data.address_zip}
+        </p>
+      </Row>
     </div>
   )
-}
-
-//==============================================================================
-//  Functions
-//==============================================================================
-
-function makeGetRequest(url) {
-  return new Promise(async (resolve, reject) => {
-    const response = await fetch(url);
-    const jsonResponse = await response.json();
-    resolve(jsonResponse.value)
-  });
 }

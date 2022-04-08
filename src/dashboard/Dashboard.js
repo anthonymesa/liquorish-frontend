@@ -6,12 +6,13 @@ import { FiPlusCircle } from 'react-icons/fi';
 import { Row, Button, Image } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import HeaderV2 from '../headerv2/HeaderV2';
+import PollingLayer from '../polling_layer/PollingLayer';
 
 //==============================================================================
 //  Module - Dashboard
 //==============================================================================
 
-export default function Dashboard(){
+export default function Dashboard() {
 
   const [user_id, setUserId] = React.useState("");
   const [bar, setBar] = React.useState("");
@@ -49,7 +50,7 @@ export default function Dashboard(){
 
   return (
     <div className="root">
-      
+
       <HeaderV2
         does_nav={true}
         nav_name={"Home"}
@@ -57,7 +58,7 @@ export default function Dashboard(){
         unstore={["bar"]}
         title={"Dashboard"}
       />
-      
+
       <BarHead bar={bar} />
       <TabPay tab_id={tab_id} user_id={user_id} />
 
@@ -75,7 +76,7 @@ export default function Dashboard(){
 //  Module - BarHead
 //==============================================================================
 
-function BarHead({bar}){
+function BarHead({ bar }) {
 
   return (
     <Row className="g-0" id="bar_head">
@@ -94,7 +95,7 @@ function BarHead({bar}){
 //  Module - TabPay
 //==============================================================================
 
-function TabPay(){
+function TabPay() {
 
   const handleTabPay = () => {
     console.log("paying for tab...")
@@ -111,48 +112,46 @@ function TabPay(){
 //  Module - TabList
 //==============================================================================
 
-function TabList(props){
-  const navigate = useNavigate();
+function TabList({ bar_id, user_id }) {
 
   const [bar_drinks_dom, setBarDrinksDom] = React.useState(null)
 
-  const handleOrderView = async (drink_data) => {
-    await sessionStorage.setItem('drink', JSON.stringify(drink_data));
-    navigate("/dashboard/orderview", { replace: true });
-  }
-
-  const generateTabDrinksDom = async () => {
-
-    const test_promise = () => {
-      return new Promise((resolve, reject) => {
-
-        getTabDrinks(props.bar_id, props.user_id).then((tab_drinks) => {
-          resolve(tab_drinks)
-        })
-      })
-    }
-
-    const tab_drinks = await test_promise()
-
-    const tab_drinks_dom = await tab_drinks.map((drink_data) =>
-      <div key={drink_data["drink_name"]} className="tab_drink" onClick={() => { handleOrderView(drink_data) }}>
-        <Row >
-          <h2>{drink_data["drink_name"]}</h2>
-        </Row>
-      </div>
-    );
-
-    setBarDrinksDom(tab_drinks_dom)
-  }
-
   useEffect(async () => {
-    await generateTabDrinksDom()
+    initializeTabDrinks()
   }, [])
 
+  const initializeTabDrinks = () => getTabDrinks(bar_id, user_id).then(generateTabList)
+
+  const generateTabList = (_tab_drinks) => {
+    const tab_list_dom = generateTabListDom(_tab_drinks)
+    setBarDrinksDom(tab_list_dom)
+  }
+
+  const generateTabListDom = (_tab_drinks) => {
+    return _tab_drinks.map((drink_data) => <TabListElement drink_data={drink_data}/>)
+  }
+  
+  const getTabDrinks = (bar_id, user_id) => {
+    return new Promise(async (resolve, reject) => {
+      const url = 'https://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
+      const response = await fetch(url)
+      const jsonResponse = await response.json();
+      resolve(jsonResponse.value)
+    });
+  }
+
+  const updateTabList = () => {
+    initializeTabDrinks()
+  }
+
   return (
-    <Row className="g-0" id="tab_list">
-      {bar_drinks_dom}
-    </Row>
+    <div>
+      <Row className="g-0" id="tab_list">
+        {bar_drinks_dom}
+      </Row>
+
+      <PollingLayer polling_time={1000} timeout_ref={'tab_list_poll'} action={updateTabList} />
+    </div>
   )
 }
 
@@ -164,7 +163,7 @@ function TabList(props){
  * This module is always floating at the bottom right corner of the dashboard.
  * When a user clicks on this element, they intend to create a new order.
  */
-function AddItemToOrder(){
+function AddItemToOrder() {
 
   const navigate = useNavigate();
 
@@ -180,22 +179,29 @@ function AddItemToOrder(){
 }
 
 //==============================================================================
-//  Functions
+//  Module - TabListElement
 //==============================================================================
 
-const getTabDrinks = (bar_id, user_id) => {
-  return new Promise(async (resolve, reject) => {
-    const client_id = sessionStorage.getItem('client_id');
+/**
+ *  This module defines a single element of the tab list.
+ */
+function TabListElement({drink_data}) {
 
-    const url = 'https://liquorish-server.azurewebsites.net/tabDrinks/' + user_id + '/' + bar_id;
+  const navigate = useNavigate();
 
-    const response = await fetch(url)
-    const jsonResponse = await response.json();
+  const handleOrderView = async (drink_data) => {
+    await sessionStorage.setItem('drink', JSON.stringify(drink_data));
+    navigate("/dashboard/orderview", { replace: true });
+  }
 
-    resolve(jsonResponse.value)
-  });
+  return (
+    <div key={drink_data["drink_name"]} className="tab_drink" onClick={() => { handleOrderView(drink_data) }}>
+      <Row >
+        <h2>{drink_data["drink_name"]}</h2>
+      </Row>
+    </div>
+  )
 }
-
 
 
 

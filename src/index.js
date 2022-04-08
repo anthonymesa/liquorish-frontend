@@ -12,7 +12,9 @@ import Dashboard from "./dashboard/Dashboard";
 import OrderView from "./order_view/OrderView";
 import NewOrder from "./new_order/NewOrder";
 import AddRto from "./add_rto/AddRto";
-import BarSettings from "./bar_setting/BarSettings";
+import Settings from "./settings/Settings";
+import OrderSavedDrinks from "./order_saved/OrderSavedDrinks";
+import AddSaved from "./add_saved/AddSaved";
 
 const App = (props) => {
   /**
@@ -81,24 +83,29 @@ const App = (props) => {
     });
   }, []);
 
-  if (is_auth === "1") {
+  if (is_auth == "1") {
     return (
       page_ready && (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/home/user" />} />
             <Route path="/home/user" element={<Home />} />
-            <Route path="/home/barsettings" element={<BarSettings />} />
+            <Route
+              path="/home/user/settings"
+              element={<Settings updateAuth={updateAuth} />}
+            />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/orderview" element={<OrderView />} />
             <Route path="/dashboard/neworder" element={<NewOrder />} />
             <Route path="/dashboard/neworder/addrto" element={<AddRto />} />
+            <Route path="/dashboard/neworder/ordersaved" element={<OrderSavedDrinks />} />
+            <Route path="/dashboard/neworder/ordersaved/addsaved" element={<AddSaved />} />
             <Route path="*" element={<Navigate to="/home/user" />} />
           </Routes>
         </BrowserRouter>
       )
     );
-  } else if (is_auth === "2") {
+  } else if (is_auth == "2") {
     return (
       page_ready && (
         <BrowserRouter>
