@@ -3,6 +3,7 @@ import './DrinkView.css'
 
 import React, { useEffect } from 'react'
 import { Row, Col, Button, Stack, Image } from 'react-bootstrap';
+import AddFavorite from '../add_favorite/AddFavorite';
 
 const DrinkInfo = (props) => {
 
@@ -20,14 +21,9 @@ const DrinkInfo = (props) => {
 const getDrinkIngredientsDom = (drink_id) => {
   return new Promise(async (resolve, reject) => {
     const url = 'https://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
-
-    console.log(url)
-
     const response = await fetch(url);
     const jsonResponse = await response.json();
-
     const drink_ingredients_list = jsonResponse.value;
-
     const drink_ingredients_dom = drink_ingredients_list.map((drink_ingredient) =>
       <div key={drink_ingredient.ingredient_id} className="drink_ingredient">
         <Row className="g-0">
@@ -45,33 +41,26 @@ const DrinkIngredients = (props) => {
   const [drink_ingredients_list, setDrinkIngredientsList] = React.useState([])
 
   useEffect(() => {
-
-    console.log(props.drink)
-
     getDrinkIngredientsDom(props.drink["drink_id"]).then((drink_ingredient_dom) => {
       setDrinkIngredientsList(drink_ingredient_dom);
     })
   }, [])
 
   return (drink_ingredients_list &&
-  <div>
-      <div id="ingredients-list">
-        {drink_ingredients_list}
-      </div>
-  </div>
-
+    <Row className="g-0" id="ingredients-list">
+      {drink_ingredients_list}
+    </Row>
   );
 }
 
 const DrinkView = ({ drink_data }) => {
 
-  useEffect(() => {
-    console.log(drink_data)
-  })
-
-  return (drink_data && 
+  return (drink_data &&
     <div>
+      <AddFavorite className="add-drink-favorite" />
+
       <DrinkInfo drink={drink_data} />
+
       <div id="ingredients_divider">
         Ingredients
       </div>

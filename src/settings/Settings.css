@@ -1,0 +1,51 @@
+
+#saved-drinks-banner {
+  font-size: x-large;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  background: rgb(37, 37, 37);
+  filter: drop-shadow(0 0 0.75rem black);
+  z-index: 100;
+}
+
+#settings-form-user {
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 30px; 
+}
+
+#password-input-form {
+  margin-bottom: 30px;
+}
+
+#city-state-form {
+  margin-bottom: 30px;
+}
+
+#settings-header {
+  height: 200px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+#user_city_state {
+  margin-bottom: 10px;
+}
+
+#reset-pass-btn {
+  margin-bottom: 10px;
+}
+
+#user_currentpassword {
+  margin-bottom: 5px;
+}
+
+#user_confirmNewpassword {
+  margin-top: 5px;
+}
+
+#city-state-input {
+  margin-bottom: 10px;
+}
