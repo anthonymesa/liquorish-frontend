@@ -1,35 +1,33 @@
-
-import './Settings.css';
-import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import "./Settings.css";
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
-import HeaderV2 from '../headerv2/HeaderV2';
-import SavedDrinks from '../SavedDrinks/SavedDrinks';
-import { Button, Row, Stack, Col } from 'react-bootstrap';
+import HeaderV2 from "../headerv2/HeaderV2";
+import SavedDrinks from "../SavedDrinks/SavedDrinks";
+import { Button, Row, Stack, Col } from "react-bootstrap";
 
 //==============================================================================
 //  Module - Settings
 //==============================================================================
 
 export default function Settings({ updateAuth }) {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  const [user_data, setUserData] = React.useState({})
-  const [is_loaded, setIsLoaded] = React.useState(false)
+  const [user_data, setUserData] = React.useState({});
+  const [is_loaded, setIsLoaded] = React.useState(false);
 
   /**
-   * Gets the users data via API call. specifically, this checks to see if the 
+   * Gets the users data via API call. specifically, this checks to see if the
    * client id is set in storage first. if it isn't then the promise is rejected,
    * and the user should be logged out, as client_id is only set on login.
    */
   const getUserData = () => {
     return new Promise(async (resolve, reject) => {
-
-      const client_id = JSON.parse(sessionStorage.getItem('client_id'));
+      const client_id = JSON.parse(sessionStorage.getItem("client_id"));
 
       if (client_id > 0) {
-        const url = 'https://liquorish-server.azurewebsites.net/user/' + client_id;
+        const url =
+          "https://liquorish-server.azurewebsites.net/user/" + client_id;
         const response = await fetch(url);
         const jsonResponse = await response.json();
         resolve(jsonResponse.value);
@@ -43,41 +41,40 @@ export default function Settings({ updateAuth }) {
    * useEffect runs the provided callback once on page load
    */
   useEffect(() => {
-    getUserData().then((_user_data) => {
+    getUserData().then(
+      (_user_data) => {
+        // This function runs on 'resolve'
 
-      // This function runs on 'resolve'
+        setUserData(_user_data);
+        setIsLoaded(true);
+      },
+      () => {
+        // This funciton runs on 'reject', removing user auth and redirecting them
+        // to the login.
 
-      setUserData(_user_data);
-      setIsLoaded(true);
-    }, () => {
-
-      // This funciton runs on 'reject', removing user auth and redirecting them
-      // to the login.
-
-      sessionStorage.removeItem('is_auth');
-      navigate("/", { replace: true });
-    })
+        sessionStorage.removeItem("is_auth");
+        navigate("/", { replace: true });
+      }
+    );
   }, []);
 
   return (
     <div className="root">
-      <HeaderV2
-        title={"Settings"}
-        does_nav={true}
-        nav_link={'/home/user'}
-      />
+      <HeaderV2 title={"Settings"} does_nav={true} nav_link={"/home/user"} />
 
-      {is_loaded &&
+      {is_loaded && (
         <Stack>
           <SettingsFormUser user={user_data} updateAuth={updateAuth} />
 
-          <div id="saved-drinks-banner">
-            SavedDrinks
-          </div>
+          <div id="saved-drinks-banner">SavedDrinks</div>
 
-          <SavedDrinks client_id={user_data.id} dom_injecting_callback={() => { }} on_drink_click={() => { }} />
+          <SavedDrinks
+            client_id={user_data.id}
+            dom_injecting_callback={() => {}}
+            on_drink_click={() => {}}
+          />
         </Stack>
-      }
+      )}
     </div>
   );
 }
@@ -87,14 +84,14 @@ export default function Settings({ updateAuth }) {
 //==============================================================================
 
 const SettingsFormUser = ({ user, updateAuth }) => {
-
   let navigate = useNavigate();
 
   const [inputnewcity, Setinputnewcity] = React.useState("");
   const [inputnewstate, Setinputnewstate] = React.useState("");
   const [inputcurrentpassword, Setinputcurrentpassword] = React.useState("");
   const [inputnewpassword, Setinputnewpassword] = React.useState("");
-  const [inputconfirmnewpassword, Setinputconfirmnewpassword] = React.useState("");
+  const [inputconfirmnewpassword, Setinputconfirmnewpassword] =
+    React.useState("");
 
   const usercity = React.useRef(null);
   const userstate = React.useRef(null);
@@ -103,31 +100,31 @@ const SettingsFormUser = ({ user, updateAuth }) => {
   const confirmNewPasswordInput = React.useRef(null);
 
   const handleCityChange = () => {
-    Setinputnewcity(usercity.current.value)
-  }
+    Setinputnewcity(usercity.current.value);
+  };
 
   const handleStateChange = () => {
-    Setinputnewstate(userstate.current.value)
-  }
+    Setinputnewstate(userstate.current.value);
+  };
 
   const handleCurrentPasswordChange = () => {
-    Setinputcurrentpassword(currentPasswordInput.current.value)
-  }
+    Setinputcurrentpassword(currentPasswordInput.current.value);
+  };
 
   const handleNewPasswordChange = () => {
-    Setinputnewpassword(newPasswordInput.current.value)
-  }
+    Setinputnewpassword(newPasswordInput.current.value);
+  };
 
   const handleConfirmNewPasswordChange = () => {
-    Setinputconfirmnewpassword(confirmNewPasswordInput.current.value)
-  }
+    Setinputconfirmnewpassword(confirmNewPasswordInput.current.value);
+  };
 
   function handleCityState() {
     const post_args = {
       method: "post",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
 
       //make sure to serialize your JSON body
@@ -135,29 +132,124 @@ const SettingsFormUser = ({ user, updateAuth }) => {
         userId: user.id,
         city: inputnewcity,
         state: inputnewstate,
-      })
-    }
+      }),
+    };
 
-    console.log(inputnewcity)
+    console.log(inputnewcity);
 
-    fetch("https://liquorish-server.azurewebsites.net/updateCityState", post_args).then((response) => {
-
+    fetch(
+      "https://liquorish-server.azurewebsites.net/updateCityState",
+      post_args
+    ).then((response) => {
       // This is just to make the page refresh
-      Setinputnewcity(inputnewcity)
+      Setinputnewcity(inputnewcity);
 
-      console.log(response.json)
+      console.log(response.json);
     });
   }
 
-  function handleReset(props) {
-    console.log('not implemented')
+  function makeGetRequest(url) {
+    return new Promise(async (resolve, reject) => {
+      const response = await fetch(url);
+      const jsonResponse = await response.json();
+      resolve(jsonResponse.value);
+    });
+  }
+
+  function validateUserLogin(username, password) {
+    const url =
+      "https://liquorish-server.azurewebsites.net/loginUser/" +
+      username +
+      "/" +
+      password;
+    return makeGetRequest(url);
+  }
+
+  function invalidLoginAlert() {
+    alert("Current password is incorrect.");
+  }
+
+  const handleSignIn = () => {
+    const username = user.username;
+    const userid = user.id;
+    const password = inputcurrentpassword;
+    console.log("username: ", username);
+    console.log("userid: ", userid);
+    console.log("password: ", password);
+    validateUserLogin(username, password).then((_response) => {
+      console.log("validating login...");
+
+      if (!_response || _response["client id"] < 0) {
+        invalidLoginAlert();
+        currentPasswordInput.current.focus();
+        return;
+      }
+    });
+  };
+
+  function updatePassword() {
+    const post_args = {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+
+      //make sure to serialize your JSON body
+      body: JSON.stringify({
+        user_id: user.id,
+        curr_pass_hash: inputcurrentpassword,
+        new_pass_hash: inputnewpassword,
+      }),
+    };
+
+    console.log("updatePassword");
+
+    fetch(
+      "https://liquorish-server.azurewebsites.net/updateUserPassword",
+      post_args
+    ).then((response) => {
+      // This is just to make the page refresh
+      currentPasswordInput.current.value = "";
+      newPasswordInput.current.value = "";
+      confirmNewPasswordInput.current.value = "";
+
+      alert("Password updated successfully.");
+    });
+  }
+
+  function handleReset() {
+    if (currentPasswordInput === "") {
+      alert("Enter current Password");
+      currentPasswordInput.current.focus();
+      return;
+    }
+    if (inputnewpassword === "") {
+      alert("Enter New Password");
+      inputnewpassword.current.focus();
+      return;
+    }
+    if (inputconfirmnewpassword === "") {
+      alert("Enter confirm New Password");
+      inputconfirmnewpassword.current.focus();
+      return;
+    }
+
+    handleSignIn();
+
+    if (inputnewpassword !== inputconfirmnewpassword) {
+      alert("Passwords do not match.");
+      newPasswordInput.current.focus();
+      return;
+    }
+    updatePassword();
   }
 
   function logoutUser(props) {
-    sessionStorage.clear()
-    updateAuth('0').then(() => {
-      navigate("/")
-    })
+    sessionStorage.clear();
+    updateAuth("0").then(() => {
+      navigate("/");
+    });
   }
 
   return (
@@ -168,37 +260,80 @@ const SettingsFormUser = ({ user, updateAuth }) => {
         </Row>
 
         <Row>
-          <div>DOB: {user.birth_date.substring(0, user.birth_date.indexOf('T'))}</div>
+          <div>
+            DOB: {user.birth_date.substring(0, user.birth_date.indexOf("T"))}
+          </div>
         </Row>
 
         <Row>
-          <div>City/State: {user.address_city}, {user.address_state}</div>
+          <div>
+            City/State: {user.address_city}, {user.address_state}
+          </div>
         </Row>
       </Stack>
 
       <Stack id="city-state-form">
         <Row id="city-state-input">
           <Col className="g-1">
-            <input id="user_city" type="text" placeholder="City" ref={usercity} onChange={handleCityChange} />
+            <input
+              id="user_city"
+              type="text"
+              placeholder="City"
+              ref={usercity}
+              onChange={handleCityChange}
+            />
           </Col>
           <Col className="g-1">
-            <input id="user_state" type="text" placeholder="State" ref={userstate} onChange={handleStateChange} />
+            <input
+              id="user_state"
+              type="text"
+              placeholder="State"
+              ref={userstate}
+              onChange={handleStateChange}
+            />
           </Col>
         </Row>
-        <Button className="btn-primary" onClick={handleCityState}>Update City/State</Button>
+        <Button className="btn-primary" onClick={handleCityState}>
+          Update City/State
+        </Button>
       </Stack>
 
       <Stack id="password-input-form">
-        <input id="user_currentpassword" type="password" placeholder="Current Password" ref={currentPasswordInput} onChange={handleCurrentPasswordChange} />
-        <input id="user_newpassword" type="password" placeholder="New Password" ref={newPasswordInput} onChange={handleNewPasswordChange} />
-        <input id="user_confirmNewpassword" type="password" placeholder="Confirm New Password" ref={confirmNewPasswordInput} onChange={handleConfirmNewPasswordChange} />
+        <input
+          id="user_currentpassword"
+          type="password"
+          placeholder="Current Password"
+          ref={currentPasswordInput}
+          onChange={handleCurrentPasswordChange}
+        />
+        <input
+          id="user_newpassword"
+          type="password"
+          placeholder="New Password"
+          ref={newPasswordInput}
+          onChange={handleNewPasswordChange}
+        />
+        <input
+          id="user_confirmNewpassword"
+          type="password"
+          placeholder="Confirm New Password"
+          ref={confirmNewPasswordInput}
+          onChange={handleConfirmNewPasswordChange}
+        />
       </Stack>
 
       <Stack>
-        <Button className="btn-primary" id="reset-pass-btn" onClick={handleReset}>Reset Password</Button>
-        <Button className="btn-secondary" onClick={logoutUser}>Log Out</Button>
+        <Button
+          className="btn-primary"
+          id="reset-pass-btn"
+          onClick={handleReset}
+        >
+          Reset Password
+        </Button>
+        <Button className="btn-secondary" onClick={logoutUser}>
+          Log Out
+        </Button>
       </Stack>
     </Stack>
   );
-}
-
+};

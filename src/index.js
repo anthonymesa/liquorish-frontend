@@ -96,10 +96,17 @@ const App = (props) => {
             />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/orderview" element={<OrderView />} />
+            <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="/dashboard/neworder" element={<NewOrder />} />
             <Route path="/dashboard/neworder/addrto" element={<AddRto />} />
-            <Route path="/dashboard/neworder/ordersaved" element={<OrderSavedDrinks />} />
-            <Route path="/dashboard/neworder/ordersaved/addsaved" element={<AddSaved />} />
+            <Route
+              path="/dashboard/neworder/ordersaved"
+              element={<OrderSavedDrinks />}
+            />
+            <Route
+              path="/dashboard/neworder/ordersaved/addsaved"
+              element={<AddSaved />}
+            />
             <Route path="*" element={<Navigate to="/home/user" />} />
           </Routes>
         </BrowserRouter>
