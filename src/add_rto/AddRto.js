@@ -6,14 +6,40 @@ import DrinkView from '../DrinkView/DrinkView'
 import { useNavigate } from 'react-router'
 import { Button } from 'react-bootstrap'
 
-const AddRtoFooter = () => {
+const AddRtoFooter = ({ drink_data, tab_id }) => {
 
     const navigate = useNavigate();
 
+    const updateOrderToTab = async () => {
+        
+        const url = "https://liquorish-server.azurewebsites.net/updateTab"
+
+        const post_args = {
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+
+            //make sure to serialize your JSON body
+            body: JSON.stringify({
+                tab_id: tab_id,
+                bar_drink_id: drink_data.bar_drink_id
+            })
+        }
+
+        return new Promise(async (resolve, reject) => {
+            const response = await fetch(url, post_args);
+            const jsonResponse = await response.json();
+            resolve(jsonResponse.value)
+        });
+    }
+
     const handle_order = () => {
-        console.log('handleing!');
-        sessionStorage.removeItem('drink_data')
-        navigate('/dashboard', {});
+        updateOrderToTab().then((response) => {
+            sessionStorage.removeItem('drink_data')
+            navigate('/dashboard', {});
+        });
     }
 
     return (
@@ -33,30 +59,24 @@ const DrinkPrice = ({ drink_price }) => {
 
 const AddRto = () => {
 
-    const [drink_data, setDrinkData] = React.useState(null)
+    const [drink_data, setDrinkData] = React.useState(null);
+    const [tab_id, setTabId] = React.useState(null);
     const [user_id, setUserId] = React.useState(null)
 
-    const getDrinkData = () => {
-        return new Promise((resolve, reject) => {
-            const session_drink_data = JSON.parse(sessionStorage.getItem('drink_data'));
-            resolve(session_drink_data);
-        });
-    }
-
     useEffect(() => {
-        getDrinkData().then((_drink_data) => {
-            setDrinkData(_drink_data);
-
-            const session_user_id = JSON.parse(sessionStorage.getItem('client_id'));
-            setUserId(session_user_id)
-
-        })
+        const session_drink_data = JSON.parse(sessionStorage.getItem('drink_data'));
+        const session_tab_data = JSON.parse(sessionStorage.getItem('tab_id'));
+        const session_user_id = JSON.parse(sessionStorage.getItem('client_id'))
+        
+        setDrinkData(session_drink_data)
+        setTabId(session_tab_data)
+        setUserId(session_user_id)
 
     }, []);
 
     return (
         <div className="root">
-            {(drink_data && user_id) &&
+            {drink_data && tab_id && user_id &&
                 <div>
                     <HeaderV2
                         does_nav={true}
@@ -68,8 +88,8 @@ const AddRto = () => {
                         ]}
                         unstore={['drink_data']}
                     />
-                    <DrinkView user_id={user_id} drink_data={drink_data} />
-                    <AddRtoFooter />
+                    <DrinkView drink_data={drink_data} user_id={user_id} />
+                    <AddRtoFooter drink_data={drink_data} tab_id={tab_id}/>
                 </div>
             }
         </div>
