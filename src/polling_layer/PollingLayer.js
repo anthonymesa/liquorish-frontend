@@ -34,32 +34,32 @@ export default function PollingLayer({polling_time, timeout_ref, action=null}){
    */
   const [flip_flop, setFlipFlop] = React.useState(false)
 
-  /**
-   *  Only runs on initial component mount. Sets flip_flop state 1 second in the
-   *  future. This will cause a module refresh, triggering the next effect that
-   *  runs if flip_flop has changed.
-   */
-  useEffect(() => {
-    setTimeout(() => {
-      setFlipFlop(flip_flop ? false : true)
-    }, polling_time, timeout_ref)
-  }, []);
+//   /**
+//    *  Only runs on initial component mount. Sets flip_flop state 1 second in the
+//    *  future. This will cause a module refresh, triggering the next effect that
+//    *  runs if flip_flop has changed.
+//    */
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setFlipFlop(flip_flop ? false : true)
+//     }, polling_time, timeout_ref)
+//   }, []);
 
-  /**
-   * This effect should run every time flip_flop is updated. Once run, it will 
-   * simply set the state of flip_flop 1 second in the future, thus causing this
-   * effect to run indefinitely as long as polling layer is mounted.
-   */
-  useEffect(() => {
-    setTimeout(() => {
+//   /**
+//    * This effect should run every time flip_flop is updated. Once run, it will 
+//    * simply set the state of flip_flop 1 second in the future, thus causing this
+//    * effect to run indefinitely as long as polling layer is mounted.
+//    */
+//   useEffect(() => {
+//     setTimeout(() => {
 
-      if(action){
-        action()
-      }
+//       if(action){
+//         action()
+//       }
 
-      setFlipFlop(flip_flop ? false : true)
-    }, polling_time, timeout_ref)
-  }, [flip_flop])
+//       setFlipFlop(flip_flop ? false : true)
+//     }, polling_time, timeout_ref)
+//   }, [flip_flop])
   
   /**
    * Nothing needs to be returned, this just makes React happy.

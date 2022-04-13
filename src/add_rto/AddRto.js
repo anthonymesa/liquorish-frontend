@@ -10,8 +10,6 @@ const AddRtoFooter = ({ drink_data, tab_id }) => {
 
     const navigate = useNavigate();
 
-
-
     const updateOrderToTab = async () => {
         
         const url = "https://liquorish-server.azurewebsites.net/updateTab"
@@ -39,7 +37,6 @@ const AddRtoFooter = ({ drink_data, tab_id }) => {
 
     const handle_order = () => {
         updateOrderToTab().then((response) => {
-            console.log(response.value)
             sessionStorage.removeItem('drink_data')
             navigate('/dashboard', {});
         });
@@ -64,19 +61,22 @@ const AddRto = () => {
 
     const [drink_data, setDrinkData] = React.useState(null);
     const [tab_id, setTabId] = React.useState(null);
+    const [user_id, setUserId] = React.useState(null)
 
     useEffect(() => {
         const session_drink_data = JSON.parse(sessionStorage.getItem('drink_data'));
         const session_tab_data = JSON.parse(sessionStorage.getItem('tab_id'));
-
+        const session_user_id = JSON.parse(sessionStorage.getItem('client_id'))
+        
         setDrinkData(session_drink_data)
         setTabId(session_tab_data)
+        setUserId(session_user_id)
 
     }, []);
 
     return (
         <div className="root">
-            {drink_data && tab_id && 
+            {drink_data && tab_id && user_id &&
                 <div>
                     <HeaderV2
                         does_nav={true}
@@ -88,7 +88,7 @@ const AddRto = () => {
                         ]}
                         unstore={['drink_data']}
                     />
-                    <DrinkView drink_data={drink_data} />
+                    <DrinkView drink_data={drink_data} user_id={user_id} />
                     <AddRtoFooter drink_data={drink_data} tab_id={tab_id}/>
                 </div>
             }

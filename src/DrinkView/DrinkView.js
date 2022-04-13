@@ -25,9 +25,12 @@ const DrinkIngredients = ({drink_data}) => {
 
     const getIngredients = (drink_id) => {
         return new Promise(async (resolve, reject) => {
-            const url = 'https://liquorish-server.azurewebsites.net/ingredients/' + drink_id;
-            const response = await fetch(url, {mode:'cors'});
+            const url = "https://liquorish-server.azurewebsites.net/ingredients/" + drink_id;
+            console.log(url)
+            const response = await fetch(url);
             const jsonResponse = await response.json();
+            console.log(JSON.stringify(jsonResponse))
+            console.log(JSON.stringify(jsonResponse.value))
             resolve(jsonResponse.value)
         });
     }
@@ -42,7 +45,7 @@ const DrinkIngredients = ({drink_data}) => {
     }
 
     useEffect(() => {
-        getIngredients(drink_data.drink_id).then(generateIngredientsList)
+        getIngredients(drink_data.drink_id).then((_ingredients) => generateIngredientsList(_ingredients))
     }, [])
 
     return (drink_ingredients_list &&
