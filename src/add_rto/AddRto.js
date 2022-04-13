@@ -10,7 +10,12 @@ const AddRtoFooter = ({ drink_data, tab_id }) => {
 
     const navigate = useNavigate();
 
-    const updateOrderToTab = () => {
+
+
+    const updateOrderToTab = async () => {
+        
+        const url = "https://liquorish-server.azurewebsites.net/updateTab"
+
         const post_args = {
             method: "post",
             headers: {
@@ -25,18 +30,19 @@ const AddRtoFooter = ({ drink_data, tab_id }) => {
             })
         }
 
-        fetch("https://liquorish-server.azurewebsites.net/updateTab", post_args).then((response) => {
-            console.log(response.json)
+        return new Promise(async (resolve, reject) => {
+            const response = await fetch(url, post_args);
+            const jsonResponse = await response.json();
+            resolve(jsonResponse.value)
         });
     }
 
     const handle_order = () => {
-        // updateOrderToTab()
-        console.log(drink_data)
-
-        // addOrder(tab_id, drink_data.bar_drink_id)
-        // sessionStorage.removeItem('drink_data')
-        // navigate('/dashboard', {});
+        updateOrderToTab().then((response) => {
+            console.log(response.value)
+            sessionStorage.removeItem('drink_data')
+            navigate('/dashboard', {});
+        });
     }
 
     return (
@@ -59,27 +65,12 @@ const AddRto = () => {
     const [drink_data, setDrinkData] = React.useState(null);
     const [tab_id, setTabId] = React.useState(null);
 
-    const getDrinkData = () => {
-        return new Promise((resolve, reject) => {
-            const session_drink_data = JSON.parse(sessionStorage.getItem('drink_data'));
-            resolve(session_drink_data);
-        });
-    }
-
-    const getTabId = () => {
-        return new Promise((resolve, reject) => {
-            const session_drink_data = JSON.parse(sessionStorage.getItem('tab_id'));
-            resolve(session_drink_data);
-        });
-    }
-
     useEffect(() => {
-        getDrinkData().then((_drink_data) => {
-            getTabId().then((_tab_id) => {
-                setDrinkData(_drink_data)
-                setTabId(tab_id)
-            })
-        })
+        const session_drink_data = JSON.parse(sessionStorage.getItem('drink_data'));
+        const session_tab_data = JSON.parse(sessionStorage.getItem('tab_id'));
+
+        setDrinkData(session_drink_data)
+        setTabId(session_tab_data)
 
     }, []);
 
