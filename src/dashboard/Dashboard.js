@@ -7,6 +7,7 @@ import { Row, Button, Image } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import HeaderV2 from '../headerv2/HeaderV2';
 import PollingLayer from '../polling_layer/PollingLayer';
+import ReadyStateIcon from '../ReadyStateIcon/ReadyStateIcon';
 
 //==============================================================================
 //  Module - Dashboard
@@ -226,6 +227,9 @@ function TabListElement({ drink_data }) {
             <Row >
                 <h2>{drink_data["drink_name"]}</h2>
             </Row>
+            <div className="element_ready_icon">
+                <ReadyStateIcon ready_state={drink_data.ready_status}/>
+            </div>
         </div>
     )
 }
