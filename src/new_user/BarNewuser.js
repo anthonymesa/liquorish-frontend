@@ -5,9 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 //import {  Row, Stack, Button, Alert, Image  } from 'react-bootstrap';
 import { Row, Stack } from "react-bootstrap";
-//import '../../../liquorish-backend/routes/get/getSavedDrinks';
-//import '../../../liquorish-backend/routes/get/updateUserCityState';
-//import '../../../liquorish-backend/routes/get/updateUserPassword';
 
 const BarNewUserHeader = () => {
   return (
@@ -133,7 +130,33 @@ const BarFormNewuser = (props) => {
             userpassword.current.focus();
             return;
       }
-    alert("Added User Successfully!");
+      const post_args = {
+        method: "post",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+  
+        //make sure to serialize your JSON body
+        body: JSON.stringify({
+          username: inputusername,
+          name_first: inputfirstname,
+          name_last: inputlastname,
+          birth_date: inputdob,
+          address_city: inputusercity,
+          address_state: inputuserstate,
+          password: inputpassword,
+        })
+      }
+  
+      console.log("BarNewUser")
+  
+      fetch("https://liquorish-server.azurewebsites.net/addBarUser", post_args).then((response) => {
+  
+        console.log(response.json)
+      });
+
+    alert("Bar User added Successfully!");
   };
 
   return (
