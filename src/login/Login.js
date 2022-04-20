@@ -196,11 +196,11 @@ function LoginFormBar({ updateAuth, setFormTypeHanlder }) {
   const passwordInput = React.useRef(null);
 
   const handleBarUsernameChange = () => {
-    setBarUsername(barUsernameInput.current.focus())
+    setBarUsername(barUsernameInput.current.value)
   }
 
   const handlePasswordChange = () => {
-    setPassword(passwordInput.current.focus())
+    setPassword(passwordInput.current.value)
   }
 
   const handleCreateBar = () => {
