@@ -1,13 +1,10 @@
 //import './Settings.css';
-import React from "react";
+import React, { useEffect } from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
 //import ValidateAuth from "../Auth";
 import { useNavigate } from "react-router-dom";
 //import {  Row, Stack, Button, Alert, Image  } from 'react-bootstrap';
 import { Row, Stack } from "react-bootstrap";
-//import '../../../liquorish-backend/routes/get/getSavedDrinks';
-//import '../../../liquorish-backend/routes/get/updateUserCityState';
-//import '../../../liquorish-backend/routes/get/updateUserPassword';
 
 const BarSettingsHeader = () => {
   return (
@@ -24,6 +21,31 @@ const BarSettingsHeader = () => {
 
 const BarSettingsForm = (props) => {
   let navigate = useNavigate();
+
+  const bar_id = JSON.parse(sessionStorage.getItem('client_id'));
+  console.log(bar_id);
+
+  const [bar_details, setBarDetails] = React.useState(null)
+  const [is_loaded, setIsLoaded] = React.useState(false)
+
+  const getBarDetails = (bar_id) => {
+    return new Promise(async (resolve, reject) => {
+
+      const url = 'https://liquorish-server.azurewebsites.net/getBar/' + bar_id
+
+      const response = await fetch(url);
+      const jsonResponse = await response.json();
+      console.log(jsonResponse.value);
+      resolve(jsonResponse.value)
+    });
+  }
+
+  useEffect(() => {
+    getBarDetails(bar_id).then((_bar_details) => {
+      setBarDetails(_bar_details)
+        setIsLoaded(true)
+    })
+  }, [])
 
   // added for Settings A3
   const [inputownerpin, SetOwnerPin] = React.useState("");
@@ -84,21 +106,68 @@ const BarSettingsForm = (props) => {
       zip.current.focus();
       return;
     }
+
+      const post_args = {
+        method: "post",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+  
+        //make sure to serialize your JSON body
+        body: JSON.stringify({
+          bar_id: bar_id,
+          address_street: inputAddress,
+          address_city: inputcity,
+          address_state: inputstate,
+          address_zip: inputzip,
+          owner_pass: inputownerpin,
+        })
+      }
+  
+      console.log("update bar settings")
+  
+      fetch("https://liquorish-server.azurewebsites.net/updateBar", post_args).then((response) => {
+  
+        console.log(response.json)
+      });
+
     alert("Bar Settings updated Successfully!");
   };
 
   const handleDeleteAccount = () => {
-    alert("Delete Account is not implemented yet!");
+    const post_args = {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+
+      //make sure to serialize your JSON body
+      body: JSON.stringify({
+        bar_id: bar_id
+      })
+    }
+
+    console.log("update bar settings")
+
+    fetch("https://liquorish-server.azurewebsites.net/deleteBar", post_args).then((response) => {
+
+      console.log(response.json)
+    });
+
+  alert("Bar deleted Successfully!");
   };
+  
   return (
     <Stack>
       <Row className="bodyContent">
         <div className="row desc">
           <div className="row">
-            <p>TheWinkingSkeever</p>
+            <p>{bar_details.bar_name}</p>
           </div>
           <div className="row">
-            <p>22 Red St., Greensboro, North Carolina, 27215</p>
+            <p>{bar_details.address_street}, {bar_details.address_city}, {bar_details.address_state}, {bar_details.address_zip}</p>
           </div>
         </div>
       </Row>

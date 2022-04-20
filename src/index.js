@@ -15,6 +15,7 @@ import AddRto from "./add_rto/AddRto";
 import Settings from "./settings/Settings";
 import OrderSavedDrinks from "./order_saved/OrderSavedDrinks";
 import AddSaved from "./add_saved/AddSaved";
+import BarSettings from "./bar_setting/BarSettings";
 
 const App = (props) => {
   /**
@@ -97,6 +98,7 @@ const App = (props) => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/orderview" element={<OrderView />} />
             <Route path="/dashboard/neworder" element={<NewOrder />} />
+            <Route path="/dashboard/barsettings" element={<BarSettings />} />
             <Route path="/dashboard/neworder/addrto" element={<AddRto />} />
             <Route path="/dashboard/neworder/ordersaved" element={<OrderSavedDrinks />} />
             <Route path="/dashboard/neworder/ordersaved/addsaved" element={<AddSaved />} />
@@ -112,7 +114,8 @@ const App = (props) => {
           <Routes>
             {/* <Route path="/" element={<Navigate to="/home/user" />} />
           <Route path="/home/bar" element={<BarHome />} />
-          <Route path="*" element={<Navigate to="/home/user" />} /> */}
+          <Route path="*" element={<Navigate to="/home/user" />} /> */
+          <Route path="/dashboard/barsettings" element={<BarSettings />} />}
           </Routes>
         </BrowserRouter>
       )
