@@ -3,19 +3,12 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 //import ValidateAuth from "../Auth";
 import { useNavigate } from "react-router-dom";
-//import {  Row, Stack, Button, Alert, Image  } from 'react-bootstrap';
+import HeaderV2 from "../headerv2/HeaderV2";
 import { Row, Stack } from "react-bootstrap";
 
 const BarNewUserHeader = () => {
   return (
-    <Stack id="newuser_header">
-      <Row id="row-header">
-        <p>
-          <a href="/">back</a>
-        </p>
-        <p>Set-up New User</p>
-      </Row>
-    </Stack>
+    <HeaderV2 title={"Set-up New User"} does_nav={true} nav_link={"/home/bar"} />
   );
 };
 
@@ -259,5 +252,3 @@ const BarNewuser = (props) => {
 };
 
 export default BarNewuser;
-
-// end of additions for Settings A3
