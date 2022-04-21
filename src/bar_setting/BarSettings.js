@@ -3,19 +3,12 @@ import React, { useEffect } from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
 //import ValidateAuth from "../Auth";
 import { useNavigate } from "react-router-dom";
-//import {  Row, Stack, Button, Alert, Image  } from 'react-bootstrap';
+import HeaderV2 from '../headerv2/HeaderV2';
 import { Row, Stack } from "react-bootstrap";
 
 const BarSettingsHeader = () => {
   return (
-    <Stack id="barsettings_header">
-      <Row id="row-header">
-        <p>
-          <a href="/">back</a>
-        </p>
-        <p>Settings</p>
-      </Row>
-    </Stack>
+    <HeaderV2 title={"Settings"} does_nav={true} nav_link={"/home/bar"} />
   );
 };
 
@@ -158,7 +151,7 @@ const BarSettingsForm = (props) => {
 
   alert("Bar deleted Successfully!");
   };
-  
+
   return (
     <Stack>
       <Row className="bodyContent">
