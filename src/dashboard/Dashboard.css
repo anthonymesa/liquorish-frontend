@@ -76,7 +76,7 @@
   display: block;
   position: absolute;
   right: 20px;
-  bottom: 20px;
+  top: 20px;
   z-index: 100;
   background: #604676;
   filter: drop-shadow(0 0 0.5rem rgba(0,0,0,.5));

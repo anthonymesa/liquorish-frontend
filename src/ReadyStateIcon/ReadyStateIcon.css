@@ -1,0 +1,9 @@
+
+.element_ready_icon {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    margin: 0px;
+    transform: translate(0, -25%);
+    scale: 250%;
+}

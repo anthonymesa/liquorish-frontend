@@ -7,6 +7,7 @@ import { Row, Button, Image } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import HeaderV2 from '../headerv2/HeaderV2';
 import PollingLayer from '../polling_layer/PollingLayer';
+import ReadyStateIcon from '../ReadyStateIcon/ReadyStateIcon';
 
 //==============================================================================
 //  Module - Dashboard
@@ -43,14 +44,11 @@ export default function Dashboard() {
             const url = 'https://liquorish-server.azurewebsites.net/getTabID/' + _user_id + '/' + _bar_id
             const response = await fetch(url);
             const jsonResponse = await response.json();
-            console.log(jsonResponse.value)
             resolve(jsonResponse.value)
         });
     }
 
     useEffect(() => {
-        console.log('testing!')
-
         getBarData().then((_bar_data) => {
             getUserId().then((_user_id) => {
                 getTabId(_user_id, _bar_data.id).then((_tab_id) => {
@@ -222,10 +220,13 @@ function TabListElement({ drink_data }) {
     }
 
     return (
-        <div key={drink_data["drink_name"]} className="tab_drink" onClick={() => { handleOrderView(drink_data) }}>
-            <Row >
+        <div key={drink_data["drink_name"]} className="tab_drink">
+            <Row onClick={() => { handleOrderView(drink_data) }}>
                 <h2>{drink_data["drink_name"]}</h2>
             </Row>
+            <div className="element_ready_icon">
+                <ReadyStateIcon drink_data={drink_data}/>
+            </div>
         </div>
     )
 }
