@@ -198,7 +198,7 @@ function AddItemToOrder() {
 
     return (
         <div id="add_item_to_order" onClick={handleAddItemToOrder}>
-            <FiPlusCircle size={"4em"} />
+            <FiPlusCircle size={"3em"} />
         </div>
     )
 }
