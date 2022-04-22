@@ -31,10 +31,13 @@ export default function ReadyStateIcon({ drink_data }){
 	}
 
 	const HandleOnClick = () => {
-		if(drink_data.ready_status === 0){
+
+        const auth_type = parseInt(sessionStorage.getItem('is_auth'))
+
+		if(auth_type === 2 && drink_data.ready_status === 0){
 			UpdateDrinkReadyState(1).then(() => {})
 		}
-		if(drink_data.ready_status === 1){
+		if(auth_type === 1 && drink_data.ready_status === 1){
 			UpdateDrinkReadyState(2).then(() => {})
 		}
 	}
