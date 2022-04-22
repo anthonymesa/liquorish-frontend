@@ -16,6 +16,7 @@ import Settings from "./settings/Settings";
 import OrderSavedDrinks from "./order_saved/OrderSavedDrinks";
 import AddSaved from "./add_saved/AddSaved";
 import BarHome from "./BarHome/BarHome";
+import BarSettings from "./bar_setting/BarSettings";
 
 const App = (props) => {
 	/**
