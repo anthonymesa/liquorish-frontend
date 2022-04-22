@@ -1,0 +1,37 @@
+.bar-dashboard-view-control{
+    
+}
+
+.orders-btn {
+    flex-grow: 1;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.tabs-btn {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.view-control{
+    position: relative;
+    height: 4em;
+    display: flex;
+    background: rgb(37, 37, 37);
+    filter: drop-shadow(0 0 0.75rem black);
+    z-index: 100;
+    bottom: 0;
+    width: 100%;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.order-list{
+    margin-bottom: 100px;
+}
+
+.transact-btn{
+    flex-grow: 1;
+    margin-right: 10px;
+}
