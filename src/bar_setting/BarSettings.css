@@ -1,0 +1,16 @@
+.bar_desc{
+    padding: 20px;
+    padding-top: 40px;
+    text-align: center;
+    width: 100%;
+}
+
+.bodyContent{
+    text-align: center;
+}
+
+#address-form{
+    position: relative;
+    width:100%;
+    margin-top: 60px;
+}

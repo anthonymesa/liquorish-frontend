@@ -114,6 +114,7 @@ const App = (props) => {
 					<Routes>
 						<Route path="/" element={<Navigate to="/home/bar" />} />
 						<Route path="/home/bar" element={<BarHome />} />
+                        <Route path="/home/bar/settings" element={<BarSettings />}/>
 						<Route path="*" element={<Navigate to="/home/bar" />} />
 					</Routes>
 				</BrowserRouter>
